@@ -1,0 +1,712 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/Masters/subPages.Master" AutoEventWireup="true" CodeBehind="DocumentsMaster.master.cs" Inherits="dms.Masters.DocumentsMaster" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+         
+    </asp:ContentPlaceHolder>
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div class="page-content">
+        <asp:ContentPlaceHolder ID="pageTitle" runat="server">
+        </asp:ContentPlaceHolder>
+       
+        <div class="row row-flex">
+            <div class="col-xs-2" runat="server" id="pnlFolders">
+                <div class="list-folders scroll-theme">
+                    <ul class="main-ul-folder" style="display: none;">
+                        <li><span class="folder-title">
+
+                            <i class="icon-plus">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+                                    <g id="Group_3023" data-name="Group 3023"
+                                        transform="translate(-1664.841 -367.841)">
+                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                            transform="translate(1664.841 367.841)" fill="#484848" />
+                                        <g id="Group_3020" data-name="Group 3020"
+                                            transform="translate(1668.87 370.266) rotate(45)">
+                                            <g id="Group_2166" data-name="Group 2166" transform="translate(0)">
+                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                    transform="translate(2.539) rotate(45)" fill="none"
+                                                    stroke="#fff" stroke-linecap="round" stroke-width="0.5" />
+                                                <line id="Line_29" class="make-plus" data-name="Line 29" x2="3.59"
+                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                    stroke-linecap="round" stroke-width="0.5" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+
+                            </i>
+
+                            <i class="icon-filder">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                    viewBox="0 0 9.378 7.729">
+                                    <g id="Group_3025" data-name="Group 3025" transform="translate(-1630 -394)">
+                                        <path id="Path_6934" data-name="Path 6934"
+                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                            transform="translate(1380.838 319.396)" fill="#484848" />
+                                        <path id="Path_6935" data-name="Path 6935"
+                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                            transform="translate(1630 349)" fill="#484848" />
+                                    </g>
+                                </svg>
+
+                            </i>
+                            مدير عام </span>
+
+                            <ul>
+                                <li><span class="folder-title">
+                                    <i class="icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                            viewBox="0 0 8 8">
+                                            <g id="Group_3023" data-name="Group 3023"
+                                                transform="translate(-1664.841 -367.841)">
+                                                <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                                    transform="translate(1664.841 367.841)" fill="#484848" />
+                                                <g id="Group_3020" data-name="Group 3020"
+                                                    transform="translate(1668.87 370.266) rotate(45)">
+                                                    <g id="Group_2166" data-name="Group 2166"
+                                                        transform="translate(0)">
+                                                        <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                            transform="translate(2.539) rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                        <line id="Line_29" class="make-plus" data-name="Line 29"
+                                                            x2="3.59" transform="rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+
+                                    </i>
+
+                                    <i class="icon-filder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                            viewBox="0 0 9.378 7.729">
+                                            <g id="Group_3025" data-name="Group 3025"
+                                                transform="translate(-1630 -394)">
+                                                <path id="Path_6934" data-name="Path 6934"
+                                                    d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                    transform="translate(1380.838 319.396)" fill="#484848" />
+                                                <path id="Path_6935" data-name="Path 6935"
+                                                    d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                    transform="translate(1630 349)" fill="#484848" />
+                                            </g>
+                                        </svg>
+
+                                    </i>
+                                    شؤون موظفين</span>
+
+                                    <ul>
+                                        <li><span class="folder-title">
+                                            <i class="icon-plus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8">
+                                                    <g id="Group_3023" data-name="Group 3023"
+                                                        transform="translate(-1664.841 -367.841)">
+                                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4"
+                                                            cy="4" r="4" transform="translate(1664.841 367.841)"
+                                                            fill="#484848" />
+                                                        <g id="Group_3020" data-name="Group 3020"
+                                                            transform="translate(1668.87 370.266) rotate(45)">
+                                                            <g id="Group_2166" data-name="Group 2166"
+                                                                transform="translate(0)">
+                                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                                    transform="translate(2.539) rotate(45)"
+                                                                    fill="none" stroke="#fff" stroke-linecap="round"
+                                                                    stroke-width="0.5" />
+                                                                <line id="Line_29" class="make-plus"
+                                                                    data-name="Line 29" x2="3.59"
+                                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                                    stroke-linecap="round" stroke-width="0.5" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+
+                                            <i class="icon-filder">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                                    viewBox="0 0 9.378 7.729">
+                                                    <g id="Group_3025" data-name="Group 3025"
+                                                        transform="translate(-1630 -394)">
+                                                        <path id="Path_6934" data-name="Path 6934"
+                                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                            transform="translate(1380.838 319.396)"
+                                                            fill="#484848" />
+                                                        <path id="Path_6935" data-name="Path 6935"
+                                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                            transform="translate(1630 349)" fill="#484848" />
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+                                            شؤون موظفين</span></li>
+                                        <li><span class="folder-title">
+                                            <i class="icon-plus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8">
+                                                    <g id="Group_3023" data-name="Group 3023"
+                                                        transform="translate(-1664.841 -367.841)">
+                                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4"
+                                                            cy="4" r="4" transform="translate(1664.841 367.841)"
+                                                            fill="#484848" />
+                                                        <g id="Group_3020" data-name="Group 3020"
+                                                            transform="translate(1668.87 370.266) rotate(45)">
+                                                            <g id="Group_2166" data-name="Group 2166"
+                                                                transform="translate(0)">
+                                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                                    transform="translate(2.539) rotate(45)"
+                                                                    fill="none" stroke="#fff" stroke-linecap="round"
+                                                                    stroke-width="0.5" />
+                                                                <line id="Line_29" class="make-plus"
+                                                                    data-name="Line 29" x2="3.59"
+                                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                                    stroke-linecap="round" stroke-width="0.5" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+
+                                            <i class="icon-filder">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                                    viewBox="0 0 9.378 7.729">
+                                                    <g id="Group_3025" data-name="Group 3025"
+                                                        transform="translate(-1630 -394)">
+                                                        <path id="Path_6934" data-name="Path 6934"
+                                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                            transform="translate(1380.838 319.396)"
+                                                            fill="#484848" />
+                                                        <path id="Path_6935" data-name="Path 6935"
+                                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                            transform="translate(1630 349)" fill="#484848" />
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+                                            شؤون موظفين</span></li>
+                                        <li><span class="folder-title">
+                                            <i class="icon-plus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8">
+                                                    <g id="Group_3023" data-name="Group 3023"
+                                                        transform="translate(-1664.841 -367.841)">
+                                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4"
+                                                            cy="4" r="4" transform="translate(1664.841 367.841)"
+                                                            fill="#484848" />
+                                                        <g id="Group_3020" data-name="Group 3020"
+                                                            transform="translate(1668.87 370.266) rotate(45)">
+                                                            <g id="Group_2166" data-name="Group 2166"
+                                                                transform="translate(0)">
+                                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                                    transform="translate(2.539) rotate(45)"
+                                                                    fill="none" stroke="#fff" stroke-linecap="round"
+                                                                    stroke-width="0.5" />
+                                                                <line id="Line_29" class="make-plus"
+                                                                    data-name="Line 29" x2="3.59"
+                                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                                    stroke-linecap="round" stroke-width="0.5" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+
+                                            <i class="icon-filder">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                                    viewBox="0 0 9.378 7.729">
+                                                    <g id="Group_3025" data-name="Group 3025"
+                                                        transform="translate(-1630 -394)">
+                                                        <path id="Path_6934" data-name="Path 6934"
+                                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                            transform="translate(1380.838 319.396)"
+                                                            fill="#484848" />
+                                                        <path id="Path_6935" data-name="Path 6935"
+                                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                            transform="translate(1630 349)" fill="#484848" />
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+                                            شؤون موظفين</span></li>
+                                    </ul>
+                                </li>
+                                <li><span class="folder-title">
+                                    <i class="icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                            viewBox="0 0 8 8">
+                                            <g id="Group_3023" data-name="Group 3023"
+                                                transform="translate(-1664.841 -367.841)">
+                                                <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                                    transform="translate(1664.841 367.841)" fill="#484848" />
+                                                <g id="Group_3020" data-name="Group 3020"
+                                                    transform="translate(1668.87 370.266) rotate(45)">
+                                                    <g id="Group_2166" data-name="Group 2166"
+                                                        transform="translate(0)">
+                                                        <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                            transform="translate(2.539) rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                        <line id="Line_29" class="make-plus" data-name="Line 29"
+                                                            x2="3.59" transform="rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+
+                                    </i>
+
+                                    <i class="icon-filder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                            viewBox="0 0 9.378 7.729">
+                                            <g id="Group_3025" data-name="Group 3025"
+                                                transform="translate(-1630 -394)">
+                                                <path id="Path_6934" data-name="Path 6934"
+                                                    d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                    transform="translate(1380.838 319.396)" fill="#484848" />
+                                                <path id="Path_6935" data-name="Path 6935"
+                                                    d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                    transform="translate(1630 349)" fill="#484848" />
+                                            </g>
+                                        </svg>
+
+                                    </i>
+                                    شؤون موظفين</span>
+                                    <ul>
+                                        <li><span class="folder-title">
+                                            <i class="icon-plus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8">
+                                                    <g id="Group_3023" data-name="Group 3023"
+                                                        transform="translate(-1664.841 -367.841)">
+                                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4"
+                                                            cy="4" r="4" transform="translate(1664.841 367.841)"
+                                                            fill="#484848" />
+                                                        <g id="Group_3020" data-name="Group 3020"
+                                                            transform="translate(1668.87 370.266) rotate(45)">
+                                                            <g id="Group_2166" data-name="Group 2166"
+                                                                transform="translate(0)">
+                                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                                    transform="translate(2.539) rotate(45)"
+                                                                    fill="none" stroke="#fff" stroke-linecap="round"
+                                                                    stroke-width="0.5" />
+                                                                <line id="Line_29" class="make-plus"
+                                                                    data-name="Line 29" x2="3.59"
+                                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                                    stroke-linecap="round" stroke-width="0.5" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+
+                                            <i class="icon-filder">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                                    viewBox="0 0 9.378 7.729">
+                                                    <g id="Group_3025" data-name="Group 3025"
+                                                        transform="translate(-1630 -394)">
+                                                        <path id="Path_6934" data-name="Path 6934"
+                                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                            transform="translate(1380.838 319.396)"
+                                                            fill="#484848" />
+                                                        <path id="Path_6935" data-name="Path 6935"
+                                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                            transform="translate(1630 349)" fill="#484848" />
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+                                            شؤون موظفين</span></li>
+                                        <li><span class="folder-title">
+                                            <i class="icon-plus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8">
+                                                    <g id="Group_3023" data-name="Group 3023"
+                                                        transform="translate(-1664.841 -367.841)">
+                                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4"
+                                                            cy="4" r="4" transform="translate(1664.841 367.841)"
+                                                            fill="#484848" />
+                                                        <g id="Group_3020" data-name="Group 3020"
+                                                            transform="translate(1668.87 370.266) rotate(45)">
+                                                            <g id="Group_2166" data-name="Group 2166"
+                                                                transform="translate(0)">
+                                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                                    transform="translate(2.539) rotate(45)"
+                                                                    fill="none" stroke="#fff" stroke-linecap="round"
+                                                                    stroke-width="0.5" />
+                                                                <line id="Line_29" class="make-plus"
+                                                                    data-name="Line 29" x2="3.59"
+                                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                                    stroke-linecap="round" stroke-width="0.5" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+
+                                            <i class="icon-filder">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                                    viewBox="0 0 9.378 7.729">
+                                                    <g id="Group_3025" data-name="Group 3025"
+                                                        transform="translate(-1630 -394)">
+                                                        <path id="Path_6934" data-name="Path 6934"
+                                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                            transform="translate(1380.838 319.396)"
+                                                            fill="#484848" />
+                                                        <path id="Path_6935" data-name="Path 6935"
+                                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                            transform="translate(1630 349)" fill="#484848" />
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+                                            شؤون موظفين</span></li>
+                                        <li><span class="folder-title">
+                                            <i class="icon-plus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                                    viewBox="0 0 8 8">
+                                                    <g id="Group_3023" data-name="Group 3023"
+                                                        transform="translate(-1664.841 -367.841)">
+                                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4"
+                                                            cy="4" r="4" transform="translate(1664.841 367.841)"
+                                                            fill="#484848" />
+                                                        <g id="Group_3020" data-name="Group 3020"
+                                                            transform="translate(1668.87 370.266) rotate(45)">
+                                                            <g id="Group_2166" data-name="Group 2166"
+                                                                transform="translate(0)">
+                                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                                    transform="translate(2.539) rotate(45)"
+                                                                    fill="none" stroke="#fff" stroke-linecap="round"
+                                                                    stroke-width="0.5" />
+                                                                <line id="Line_29" class="make-plus"
+                                                                    data-name="Line 29" x2="3.59"
+                                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                                    stroke-linecap="round" stroke-width="0.5" />
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+
+                                            <i class="icon-filder">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                                    viewBox="0 0 9.378 7.729">
+                                                    <g id="Group_3025" data-name="Group 3025"
+                                                        transform="translate(-1630 -394)">
+                                                        <path id="Path_6934" data-name="Path 6934"
+                                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                            transform="translate(1380.838 319.396)"
+                                                            fill="#484848" />
+                                                        <path id="Path_6935" data-name="Path 6935"
+                                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                            transform="translate(1630 349)" fill="#484848" />
+                                                    </g>
+                                                </svg>
+
+                                            </i>
+                                            شؤون موظفين</span></li>
+                                    </ul>
+                                </li>
+                                <li><span class="folder-title">
+                                    <i class="icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                            viewBox="0 0 8 8">
+                                            <g id="Group_3023" data-name="Group 3023"
+                                                transform="translate(-1664.841 -367.841)">
+                                                <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                                    transform="translate(1664.841 367.841)" fill="#484848" />
+                                                <g id="Group_3020" data-name="Group 3020"
+                                                    transform="translate(1668.87 370.266) rotate(45)">
+                                                    <g id="Group_2166" data-name="Group 2166"
+                                                        transform="translate(0)">
+                                                        <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                            transform="translate(2.539) rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                        <line id="Line_29" class="make-plus" data-name="Line 29"
+                                                            x2="3.59" transform="rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+
+                                    </i>
+
+                                    <i class="icon-filder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                            viewBox="0 0 9.378 7.729">
+                                            <g id="Group_3025" data-name="Group 3025"
+                                                transform="translate(-1630 -394)">
+                                                <path id="Path_6934" data-name="Path 6934"
+                                                    d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                    transform="translate(1380.838 319.396)" fill="#484848" />
+                                                <path id="Path_6935" data-name="Path 6935"
+                                                    d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                    transform="translate(1630 349)" fill="#484848" />
+                                            </g>
+                                        </svg>
+
+                                    </i>
+                                    شؤون موظفين</span></li>
+                            </ul>
+                        </li>
+                        <li><span class="folder-title">
+                            <i class="icon-plus">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+                                    <g id="Group_3023" data-name="Group 3023"
+                                        transform="translate(-1664.841 -367.841)">
+                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                            transform="translate(1664.841 367.841)" fill="#484848" />
+                                        <g id="Group_3020" data-name="Group 3020"
+                                            transform="translate(1668.87 370.266) rotate(45)">
+                                            <g id="Group_2166" data-name="Group 2166" transform="translate(0)">
+                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                    transform="translate(2.539) rotate(45)" fill="none"
+                                                    stroke="#fff" stroke-linecap="round" stroke-width="0.5" />
+                                                <line id="Line_29" class="make-plus" data-name="Line 29" x2="3.59"
+                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                    stroke-linecap="round" stroke-width="0.5" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+
+                            </i>
+
+                            <i class="icon-filder">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                    viewBox="0 0 9.378 7.729">
+                                    <g id="Group_3025" data-name="Group 3025" transform="translate(-1630 -394)">
+                                        <path id="Path_6934" data-name="Path 6934"
+                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                            transform="translate(1380.838 319.396)" fill="#484848" />
+                                        <path id="Path_6935" data-name="Path 6935"
+                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                            transform="translate(1630 349)" fill="#484848" />
+                                    </g>
+                                </svg>
+
+                            </i>
+                            مدير عام</span>
+                            <ul>
+                                <li><span class="folder-title">
+                                    <i class="icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                            viewBox="0 0 8 8">
+                                            <g id="Group_3023" data-name="Group 3023"
+                                                transform="translate(-1664.841 -367.841)">
+                                                <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                                    transform="translate(1664.841 367.841)" fill="#484848" />
+                                                <g id="Group_3020" data-name="Group 3020"
+                                                    transform="translate(1668.87 370.266) rotate(45)">
+                                                    <g id="Group_2166" data-name="Group 2166"
+                                                        transform="translate(0)">
+                                                        <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                            transform="translate(2.539) rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                        <line id="Line_29" class="make-plus" data-name="Line 29"
+                                                            x2="3.59" transform="rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+
+                                    </i>
+
+                                    <i class="icon-filder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                            viewBox="0 0 9.378 7.729">
+                                            <g id="Group_3025" data-name="Group 3025"
+                                                transform="translate(-1630 -394)">
+                                                <path id="Path_6934" data-name="Path 6934"
+                                                    d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                    transform="translate(1380.838 319.396)" fill="#484848" />
+                                                <path id="Path_6935" data-name="Path 6935"
+                                                    d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                    transform="translate(1630 349)" fill="#484848" />
+                                            </g>
+                                        </svg>
+
+                                    </i>
+                                    شؤون موظفين</span></li>
+                                <li><span class="folder-title">
+                                    <i class="icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                            viewBox="0 0 8 8">
+                                            <g id="Group_3023" data-name="Group 3023"
+                                                transform="translate(-1664.841 -367.841)">
+                                                <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                                    transform="translate(1664.841 367.841)" fill="#484848" />
+                                                <g id="Group_3020" data-name="Group 3020"
+                                                    transform="translate(1668.87 370.266) rotate(45)">
+                                                    <g id="Group_2166" data-name="Group 2166"
+                                                        transform="translate(0)">
+                                                        <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                            transform="translate(2.539) rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                        <line id="Line_29" class="make-plus" data-name="Line 29"
+                                                            x2="3.59" transform="rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+
+                                    </i>
+
+                                    <i class="icon-filder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                            viewBox="0 0 9.378 7.729">
+                                            <g id="Group_3025" data-name="Group 3025"
+                                                transform="translate(-1630 -394)">
+                                                <path id="Path_6934" data-name="Path 6934"
+                                                    d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                    transform="translate(1380.838 319.396)" fill="#484848" />
+                                                <path id="Path_6935" data-name="Path 6935"
+                                                    d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                    transform="translate(1630 349)" fill="#484848" />
+                                            </g>
+                                        </svg>
+
+                                    </i>
+                                    شؤون موظفين</span></li>
+                                <li><span class="folder-title">
+                                    <i class="icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                                            viewBox="0 0 8 8">
+                                            <g id="Group_3023" data-name="Group 3023"
+                                                transform="translate(-1664.841 -367.841)">
+                                                <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                                    transform="translate(1664.841 367.841)" fill="#484848" />
+                                                <g id="Group_3020" data-name="Group 3020"
+                                                    transform="translate(1668.87 370.266) rotate(45)">
+                                                    <g id="Group_2166" data-name="Group 2166"
+                                                        transform="translate(0)">
+                                                        <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                            transform="translate(2.539) rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                        <line id="Line_29" class="make-plus" data-name="Line 29"
+                                                            x2="3.59" transform="rotate(45)" fill="none"
+                                                            stroke="#fff" stroke-linecap="round"
+                                                            stroke-width="0.5" />
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+
+                                    </i>
+
+                                    <i class="icon-filder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                            viewBox="0 0 9.378 7.729">
+                                            <g id="Group_3025" data-name="Group 3025"
+                                                transform="translate(-1630 -394)">
+                                                <path id="Path_6934" data-name="Path 6934"
+                                                    d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                                    transform="translate(1380.838 319.396)" fill="#484848" />
+                                                <path id="Path_6935" data-name="Path 6935"
+                                                    d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                                    transform="translate(1630 349)" fill="#484848" />
+                                            </g>
+                                        </svg>
+
+                                    </i>
+                                    شؤون موظفين</span></li>
+                            </ul>
+                        </li>
+                        <li><span class="folder-title">
+                            <i class="icon-plus">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+                                    <g id="Group_3023" data-name="Group 3023"
+                                        transform="translate(-1664.841 -367.841)">
+                                        <circle id="Ellipse_598" data-name="Ellipse 598" cx="4" cy="4" r="4"
+                                            transform="translate(1664.841 367.841)" fill="#484848" />
+                                        <g id="Group_3020" data-name="Group 3020"
+                                            transform="translate(1668.87 370.266) rotate(45)">
+                                            <g id="Group_2166" data-name="Group 2166" transform="translate(0)">
+                                                <line id="Line_28" data-name="Line 28" y2="3.59"
+                                                    transform="translate(2.539) rotate(45)" fill="none"
+                                                    stroke="#fff" stroke-linecap="round" stroke-width="0.5" />
+                                                <line id="Line_29" class="make-plus" data-name="Line 29" x2="3.59"
+                                                    transform="rotate(45)" fill="none" stroke="#fff"
+                                                    stroke-linecap="round" stroke-width="0.5" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+
+                            </i>
+
+                            <i class="icon-filder">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="9.378" height="7.729"
+                                    viewBox="0 0 9.378 7.729">
+                                    <g id="Group_3025" data-name="Group 3025" transform="translate(-1630 -394)">
+                                        <path id="Path_6934" data-name="Path 6934"
+                                            d="M254.34,75.824h4.06a.141.141,0,0,0,.141-.141v-.543A.141.141,0,0,0,258.4,75h-4.447a.141.141,0,0,0-.115.223l.388.543A.141.141,0,0,0,254.34,75.824Z"
+                                            transform="translate(1380.838 319.396)" fill="#484848" />
+                                        <path id="Path_6935" data-name="Path 6935"
+                                            d="M3.056,45H.763A.763.763,0,0,0,0,45.763v6.2a.763.763,0,0,0,.763.763H8.615a.763.763,0,0,0,.763-.763v-4.28a.763.763,0,0,0-.763-.763h-3.4a.763.763,0,0,1-.621-.32L3.677,45.32A.763.763,0,0,0,3.056,45Z"
+                                            transform="translate(1630 349)" fill="#484848" />
+                                    </g>
+                                </svg>
+
+                            </i>
+                            مدير عام </span></li>
+                    </ul>
+                    <asp:TreeView ID="trvFolders" runat="server"
+                        OnTreeNodePopulate="trvFolders_TreeNodePopulate"
+                        OnSelectedNodeChanged="trvFolders_SelectedNodeChanged" Font-Size="14px">
+                    </asp:TreeView>
+                </div>
+            </div>
+            <div class="col-xs-10" runat="server" id="pnlContent">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolderBody" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </div>
+
+    </div>
+    <div style="display: none">
+        <table width="100%" cellpadding="0" cellspacing="0" id="content_table"
+            style="background-color: #FFFFFF;">
+            <tr>
+                <td valign="top" runat="server" id="tdFolders"
+                    style="width: 250px; background-color: #f6f6f6">
+                    <div class="inner_header main-title">
+                        <%= (Session["lang"].ToString() == "0") ? "Folders" : "المجلدات"%>
+                    </div>
+                    <br />
+
+                </td>
+                <td valign="top"></td>
+            </tr>
+
+        </table>
+    </div>
+
+</asp:Content>
+
+<asp:Content runat="server" ContentPlaceHolderID="outForm">
+    <asp:ContentPlaceHolder runat="server" ID="outOfForm"></asp:ContentPlaceHolder>
+</asp:Content>

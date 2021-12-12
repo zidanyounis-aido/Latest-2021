@@ -1,0 +1,133 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/Masters/subPages.Master" AutoEventWireup="true" CodeBehind="SettingsNestedMaster.master.cs" Inherits="dms.Masters.SettingsNestedMaster" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <script type="text/javascript">
+        $(document).load($(function () {
+            if ($("#uiDialog").length > 0) {
+                $("#uiDialog").hide();
+            }
+            $('body').css("background-image", "url(/Images/bg_" + $("#createdHiddenuserId").val() + ".jpg)");
+            $('body').css("background-repeat", "Repeat");
+            $('body').css("background-size", "initial");
+
+        }));
+        function changeBackground() {
+            $('body').css("background-image", "url(/Images/bg_" + $("#createdByHidden").val() + ".jpg)");
+            $('body').css("background-repeat", "Repeat");
+            $('body').css("background-size", "initial");
+            //document.getElementById("bodyTag").style.backgroundImage = "url(../Images/" + document.getElementById("hdnBackground").value + ")";
+            //document.getElementById("bodyTag").style.backgroundRepeat = "Repeat";
+            //document.getElementById("bodyTag").style.backgroundSize = "initial";
+        }
+        function showFolderDialog() {
+            //$("#uiDialog").dialog();
+            var offset = $("#txtFldrID").offset();
+            var xPos = offset.left;
+
+            var yPos = offset.top + 20;
+            $('#uiDialog').css({ "position": "absolute", "left": xPos, "top": yPos, "backgroung-color": "white", "width": "200px", "border": "solid 1px black" });
+            $("#uiDialog").show();
+        }
+
+        function selectFolder(fldrID, fldrName) {
+            document.getElementById("hdnFldrID").value = String(fldrID);
+            document.getElementById("txtFldrID").value = fldrName;
+            $("#uiDialog").hide();
+        }
+    </script>
+
+    <script type="text/javascript">
+
+
+        //        $(function () {
+        //            $(".ui-widget-content").hide();
+        //        });
+
+        function changeToAddNew(addTitle) {
+            clear_form_elements("#ContentPlaceHolder1_ContentPlaceHolder1_divDetails");
+            $(".formModeTitleCSS").html(addTitle);
+            $('input[id="rdoSaveMethod_0"]').prop('checked', true);
+            $('input[id="chkActive"]').prop('checked', true);
+            $("#tblDetailsForm").hide();
+
+            //$("#tblEditForm .chkActiveCSS:first").prop('checked', true);
+        }
+        function clear_form_elements(ele) {
+            $(ele).find(':input').each(function () {
+                switch (this.type) {
+                    case 'password':
+                    case 'select-multiple':
+                    case 'select-one':
+                    case 'text':
+                    case 'textarea':
+                        $(this).val('');
+                        break;
+                    case 'checkbox':
+                    case 'radio':
+                        this.checked = false;
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.search);
+            if (results == null)
+                return "";
+            else
+                return decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        function bodyClick() {
+            parent.activeDialog(getParameterByName("dlgid"));
+        }
+    </script>
+    
+    <script src="../JS/micromodal.min.js"></script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div class="page-content">
+        <asp:ContentPlaceHolder ID="pageTitle" runat="server">
+        </asp:ContentPlaceHolder>
+        <div class="row row-flex">
+            <div class="col-xs-2">
+                <ul class="setting-aside tablist">
+                    <asp:Repeater ID="rptSettingsMainIcons" runat="server">
+                        <ItemTemplate>
+                            <li class='<%# Eval("ProgramID").ToString()==Request.QueryString["CODEN"] ? "active":"" %>'>
+                                <a onclick="<%# "parent.changetab('" + Request.QueryString["CODEN"] + "','" + Eval("ProgramID") + "','" + GetProgramName(Convert.ToInt32(Request.QueryString["CODEN"])) + "','" + (Session["lang"].ToString() == "0" ? Eval("programName") : Eval("programNameAr")) +  "','" + GetProgramURL(Convert.ToInt32(Request.QueryString["CODEN"])) + "','" + Eval("programURL") + "')" %>" href='<%# DataBinder.Eval(Container.DataItem, "programURL") + ".aspx?CODEN=" + Eval("ProgramID") %>'>
+                                    <div class="icon-setting">
+                                        <%# DataBinder.Eval(Container.DataItem, "svg") %>
+                                    </div>
+                                    <%# (Session["lang"].ToString() == "0") ? Eval("programName") : Eval("programNameAr")%>
+                                </a>
+                            </li>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </ul>
+            </div>
+            <div class="col-xs-10">
+                <div>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+                            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                            </asp:ContentPlaceHolder>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="outForm" runat="server">
+    <asp:ContentPlaceHolder ID="OutOfDesign" runat="server"></asp:ContentPlaceHolder>
+</asp:Content>

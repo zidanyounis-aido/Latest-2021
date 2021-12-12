@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>csXImage Clientside Web Application Demo</title>
+</head>
+
+<body>
+
+<script language="javascript" type="text/javascript" >
+//<![CDATA[
+
+window.onload = function() {
+    document.form1.openbutton.disabled = false;
+    document.form1.savebutton.disabled = true;
+    document.form1.scanbutton.disabled = false;
+    document.form1.clearbutton.disabled = true;
+    document.form1.rotatebutton.disabled = true;
+    csxi.AutoZoom = true;
+    csxi.ScaletoGray = true;
+  }
+
+  function OpenClick()
+  {
+    if (csxi.LoadDialog())
+    {
+      document.form1.savebutton.disabled = false;
+      document.form1.clearbutton.disabled = false;
+      document.form1.rotatebutton.disabled = false;
+    }
+  }
+
+  function SaveClick()
+  {
+    csxi.SaveDialog();
+  }
+
+  function ClearClick()
+  {
+    Initialisation();
+    csxi.Clear();
+  }
+
+  function RotateClick()
+  {
+    csxi.Rotate(90.0);
+  }
+
+  function ScanClick()
+  {
+    csxi.SelectTwainDevice();
+    csxi.Acquire();
+    if (csxi.ImageLoaded)
+    {
+      document.form1.savebutton.disabled = false;
+      document.form1.clearbutton.disabled = false;
+      document.form1.rotatebutton.disabled = false;
+    }
+  }
+
+//]]>
+</script>
+
+<p>This example web page demonstrates the use of csXImage as a clientside ActiveX control.  A few simple functions are demonstrated 
+including: loading an image from a local file, saving an image, acquiring an image from a scanner, and rotating the loaded image.</p>
+<p>For this example to be run from a web server, the files csXImageTrial.ocx and csximagetrial.lpk must be copied to the same directory on the server.  
+More detailed information about the use of csXImage as a clientside ActiveX control is available at 
+<a href="http://www.chestysoft.com/ximage/clientside.asp">http://www.chestysoft.com/ximage/clientside.asp</a></p>
+
+<form name="form1" action="" >
+<table>
+<tr>
+  <td><input type="button" name="openbutton" value="Load Image" onclick="OpenClick();" /></td>
+  <td><input type="button" name="savebutton" value="Save Image" onclick="SaveClick();" /></td>
+  <td><input type="button" name="scanbutton" value="Scan Image" onclick="ScanClick();" /></td>
+</tr>
+<tr>
+  <td><input type="button" name="clearbutton" value="Clear Image" onclick="ClearClick();" /></td>
+  <td><input type="button" name="rotatebutton" value="Rotate Image" onclick="RotateClick();" /></td>
+</tr>
+</table>
+</form>
+
+<!-- This first object tag tells the browser where to find the licence information needed to allow csXImage to run.  
+The file csximagetrial.lpk should be copied to the web server in the same directory as the .ocx file.  -->
+
+<object classid="clsid:5220cb21-c88d-11cf-b347-00aa00a28331"><param name="LPKPath" value="csximagetrial.lpk" /></object>
+
+<!-- A second object tag identifies the csXImage control itself and allows the size of the control as displayed in the browser to be set.  -->
+
+<object id="csxi" classid="clsid:d7ec6ec3-1cdf-11d7-8344-00c1261173f0" codebase="csximagetrial.ocx" width="800" height="600"></object>
+
+</body>
+</html>

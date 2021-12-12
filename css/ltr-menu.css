@@ -1,0 +1,33 @@
+﻿@import url(http://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
+
+:not(i) {
+    font-family: 'Droid Arabic Kufi' !important;
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    font-family: 'Droid Arabic Kufi' !important;
+}
+
+.lnk:link, .lnk:visited, .lnk:active {
+    font-family: 'Droid Arabic Kufi' !important;
+}
+
+#iconscontent {
+    right: 0 !important;
+}
+
+div#tabs {
+    /*width: 94% !important;*/
+/*    width:calc(100% - 85px) !important;
+    left: 0px !important;*/
+}
+
+div.menuDiv {
+    direction: rtl !important;
+}
+
+#iconscontent div.imgcont {
+    float: right !important;
+}

@@ -1,0 +1,167 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="dms.Masters.Admin" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server" dir="rtl">
+    <title></title>
+    <style type="text/css">
+        .loading {
+            font-family: Arial;
+            font-size: 10pt;
+            border: 5px solid #67CFF5;
+            width: 200px;
+            height: 100px;
+            display: none;
+            position: fixed;
+            background-color: White;
+            z-index: 999;
+        }
+
+        a:hover, ae:focus {
+            text-decoration: none !important;
+        }
+
+        .required_input label {
+            color: #484848 !important;
+        }
+
+        .radio-input-holder label {
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+    </style>
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="/Assets/UIKIT/css/bootstrap.css" />
+    <link rel="stylesheet" runat="server" id="linkBootstrap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.18/themes/base/minified/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css" />
+    <link rel="stylesheet" href="/Assets/UIKIT/css/main.min.css" />
+    <link rel="stylesheet" href="/Assets/UIKIT/css/MainStyle-RTL.css" />
+    <link rel="stylesheet" runat="server" id="linkLtr" />
+    <style>
+        :root {
+            --main-color: 0, 114, 255;
+        }
+    </style>
+    <script src="/Assets/UIKIT/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).load($(function () {
+            if ($("#uiDialog").length > 0) {
+                $("#uiDialog").hide();
+            }
+            $('body').css("background-image", "url(/Images/bg_" + $("#createdHiddenuserId").val() + ".jpg)");
+            $('body').css("background-repeat", "Repeat");
+            $('body').css("background-size", "initial");
+
+        }));
+        function changeBackground() {
+            $('body').css("background-image", "url(/Images/bg_" + $("#createdByHidden").val() + ".jpg)");
+            $('body').css("background-repeat", "Repeat");
+            $('body').css("background-size", "initial");
+            //document.getElementById("bodyTag").style.backgroundImage = "url(../Images/" + document.getElementById("hdnBackground").value + ")";
+            //document.getElementById("bodyTag").style.backgroundRepeat = "Repeat";
+            //document.getElementById("bodyTag").style.backgroundSize = "initial";
+        }
+        function showFolderDialog() {
+            //$("#uiDialog").dialog();
+            var offset = $("#txtFldrID").offset();
+            var xPos = offset.left;
+
+            var yPos = offset.top + 20;
+            $('#uiDialog').css({ "position": "absolute", "left": xPos, "top": yPos, "backgroung-color": "white", "width": "200px", "border": "solid 1px black" });
+
+            $("#uiDialog").show();
+        }
+
+        function selectFolder(fldrID, fldrName) {
+            document.getElementById("hdnFldrID").value = String(fldrID);
+            document.getElementById("txtFldrID").value = fldrName;
+            $("#uiDialog").hide();
+        }
+    </script>
+
+    <script type="text/javascript">
+        //        $(function () {
+        //            $(".ui-widget-content").hide();
+        //        });
+        function changeToAddNew(addTitle) {
+            clear_form_elements("#tblEditForm");
+            $(".formModeTitleCSS").html(addTitle);
+            $('input[id="rdoSaveMethod_0"]').prop('checked', true);
+            $('input[id="chkActive"]').prop('checked', true);
+            $("#tblDetailsForm").hide();
+            //$("#tblEditForm .chkActiveCSS:first").prop('checked', true);
+        }
+        function clear_form_elements(ele) {
+            $(ele).find(':input').each(function () {
+                switch (this.type) {
+                    case 'password':
+                    case 'select-multiple':
+                    case 'select-one':
+                    case 'text':
+                    case 'textarea':
+                        $(this).val('');
+                        break;
+                    case 'checkbox':
+                    case 'radio':
+                        this.checked = false;
+                }
+            });
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <script type="text/javascript">
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.search);
+            if (results == null)
+                return "";
+            else
+                return decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        function bodyClick() {
+            parent.activeDialog(getParameterByName("dlgid"));
+        }
+    </script>
+</head>
+<body class="body-subpage">
+    <input type="hidden" id="createdHiddenuserId" value="<%= Session["userId"].ToString() %>" />
+    <form id="form1" runat="server">
+<%--        <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server">
+        </asp:ToolkitScriptManager>--%>
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <div class="page-content">
+            <asp:ContentPlaceHolder ID="pageTitle" runat="server">
+            </asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolderRightBar" runat="server">
+            </asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolderBody" runat="server">
+            </asp:ContentPlaceHolder>
+            <input type="hidden" name="hdnSelectedFolder" id="hdnSelectedFolder" />
+        </div>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootbox@5.5.2/bootbox.all.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"></script>
+        <script src="/Assets/UIKIT/js/Chart.min.js"></script>
+        <script src="/Assets/UIKIT/js/utils.js"></script>
+        <script src="/Assets/UIKIT/js/main.min.js"></script>
+        <script src="/Assets/UIKIT/fullcalendar/lib/locales-all.min.js"></script>
+        <script src="/JS/jquery-ui-1.8.19.custom.min.js"></script>
+        <script src="/Assets/UIKIT/js/script.js"></script>
+        <script>
+            var lang =<%= (Session["lang"].ToString() == "0") ? "'en'" : "'ar'"%>;
+        </script>
+        <asp:ContentPlaceHolder ID="OutOfDesign" runat="server"></asp:ContentPlaceHolder>
+    </form>
+</body>
+</html>

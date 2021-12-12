@@ -1,0 +1,951 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.master.cs" Inherits="dms.Masters.Main" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+<!DOCTYPE html>
+<html class="scroll-theme">
+<head runat="server">
+    <meta charset="utf-8">
+    <title>
+        <%= Session["lang"].ToString() == "0" ? dms.sysSettings.getSettingValue("client_name_en") : dms.sysSettings.getSettingValue("client_name_ar")%>
+    </title>
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="/Assets/UIKIT/css/bootstrap.css">
+    <link rel="stylesheet" runat="server" id="linkBootstrap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.18/themes/base/minified/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css" />
+    <link rel="stylesheet" href="/Assets/UIKIT/css/main.min.css" />
+    <link rel="stylesheet" href="/Assets/UIKIT/css/MainStyle-RTL.css" />
+    <link rel="stylesheet" runat="server" id="linkLtr" />
+    <style>
+        :root {
+            --main-color: 0, 114, 255;
+        }
+
+        .hidde-this {
+            display: none;
+        }
+
+        .BackgroundProfile {
+            background-color: Gray;
+            filter: alpha(opacity=70);
+            opacity: 0.7;
+        }
+
+        a:hover, ae:focus {
+            text-decoration: none !important;
+        }
+
+        .required_input label {
+            color: #484848 !important;
+        }
+
+        .radio-input-holder label {
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+
+        .btn-primary {
+            background: #0072ff !important;
+        }
+
+        /*     #sortableTabs {
+            overflow: hidden;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            right: 0px;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+            #sortableTabs li {
+          
+                text-align: center;
+                float: left;
+            }
+
+            #sortableTabs li {
+            }
+
+        .draggable-placeholder {
+       
+        }*/
+    </style>
+
+    <script>
+        var lang =<%= (Session["lang"].ToString() == "0") ? "'en'" : "'ar'"%>;
+    </script>
+    <script>
+        function dialog(xthis) {
+            var msg = lang == "ar" ? "سيؤدي تغيير اللغة إلى إغلاق جميع علامات التبويب المفتوحة ، يرجى التأكد من حفظ عملك" : "Changing language will close all open tabs, please be sure to save your work";
+            $('.modal-title').html(msg);
+            var dialog = $('#changeLangx-confirm').dialog();
+
+            $('.btn-done-model').click(function () {
+                dialog.dialog('close');
+                $("#<%= DropDownListLang.ClientID  %>").val($(xthis).attr("data-id"));
+                sessionStorage.clear();
+                __doPostBack("<%= DropDownListLang.ClientID  %>", "");
+            });
+            $('.btn-close-model').click(function () {
+                dialog.dialog('close');
+            });
+        }
+        function changeLangx(xthis) {
+            var msg = lang == "ar" ? "سيؤدي تغيير اللغة إلى إغلاق جميع علامات التبويب المفتوحة ، يرجى التأكد من حفظ عملك" : "Changing the language will close all opened tabs, please make sure that you have saved your work";
+            if (confirm(msg)) {
+                $("#<%= DropDownListLang.ClientID  %>").val($(xthis).attr("data-id"));
+                __doPostBack("<%= DropDownListLang.ClientID  %>", "");
+            }
+            else { }
+        }
+        function clearframe() {
+            var frame = document.getElementById("<%= irm1.ClientID %>");
+            //window.frames[frame].document.clear();
+            frame.src = "../admin/UpdateProfile.aspx";
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body id="bodyTag" style="overflow: hidden; background-repeat: repeat;">
+    <input type="hidden" id="createdHiddenuserId" value="<%= Session["userId"].ToString() %>" />
+
+    <form id="form1" runat="server" onsubmit="ShowProgress();">
+        <asp:ScriptManager ID="ScriptManager1" runat="server">
+        </asp:ScriptManager>
+        <asp:HiddenField ID="hdnBackground" runat="server" ClientIDMode="Static" />
+        <header>
+            <nav class="main-nav">
+                <div class="nav-logo-holder">
+                    <asp:Image runat="server" ID="imgCompany" ImageUrl="../images/CompanyLogo.png" onclick="minimize()" />
+                    <%-- <img src="img/nav-logo.png">--%>
+                </div>
+
+                <div class="nav-info-holder">
+                    <div class="nav-search-holder">
+                        <div class="nav-search-input">
+                            <input type="text" id="txtSearch" name="txtSearch" onkeyup="GetAllSearch();" autocomplete="off" value="<%= (Session["lang"] == "0") ? "Search" : "بحث"%>" onfocus="if (this.value=='<%= (Session["lang"] == "0") ? "Search" : "بحث"%>'){this.value=''}" onblur="if (this.value==''){this.value='<%= (Session["lang"] == "0") ? "Search" : "بحث"%>'}" />
+
+                            <%-- <input type="text" placeholder="بحث">--%>
+                            <div class="btn-search" onclick="showSearchDlg()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17.293" height="17.293"
+                                    viewBox="0 0 17.293 17.293">
+                                    <g id="search" transform="translate(0.5 0.5)">
+                                        <circle id="Oval" cx="7.149" cy="7.149" r="7.149" fill="none" stroke="#b2b2b2"
+                                            stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                            stroke-width="1" />
+                                        <path id="Path" d="M3.888,3.888,0,0" transform="translate(12.199 12.199)"
+                                            fill="none" stroke="#b2b2b2" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-miterlimit="10" stroke-width="1" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="search-result-holder scroll-theme">
+                            <div class="nav-empty-search search-loader" style="display: none">
+                                <div class="nav-dropholder-item">
+                                    <img src="../img/Pulse-1s-200px.gif" height="50px" style="margin: auto" />
+                                </div>
+                            </div>
+                            <div class="nav-empty-search search-empty" style="display: none">
+                                <div class="icon-search">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="17.293" height="17.293"
+                                        viewBox="0 0 17.293 17.293">
+                                        <g id="search" transform="translate(0.5 0.5)">
+                                            <circle id="Oval" cx="7.149" cy="7.149" r="7.149" fill="none" stroke="#b2b2b2"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"
+                                                stroke-width="1" />
+                                            <path id="Path" d="M3.888,3.888,0,0" transform="translate(12.199 12.199)"
+                                                fill="none" stroke="#b2b2b2" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-miterlimit="10" stroke-width="1" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <p>لا توجد نتائج بحث</p>
+                            </div>
+
+                            <div class="search-result-block search-block1" style="display: none">
+                                <ul>
+                                </ul>
+                            </div>
+
+                            <div class="search-result-block search-block2" style="display: none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-time-holder">
+                        <div class="icon-time">
+                            <svg xmlns="http://www.w3.org/2000/svg" id="Group_2143" data-name="Group 2143" width="19"
+                                height="19" viewBox="0 0 19 19">
+                                <path id="Path_6985" data-name="Path 6985"
+                                    d="M9.5,0A9.5,9.5,0,1,0,19,9.5,9.511,9.511,0,0,0,9.5,0Zm0,17.812A8.312,8.312,0,1,1,17.812,9.5,8.322,8.322,0,0,1,9.5,17.812Z"
+                                    fill="#484848" />
+                                <path id="Path_6986" data-name="Path 6986"
+                                    d="M241.187,96H240v6.183l3.736,3.736.84-.84-3.388-3.388Z"
+                                    transform="translate(-231.094 -92.438)" fill="#484848" />
+                            </svg>
+                        </div>
+
+                        <div class="nav-currenttime">
+                            <p class="nav-date" runat="server" id="lblnaveDate"></p>
+                            ,
+                            <p class="nav-time" runat="server" id="lblnavTime">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="nav-notif-holder">
+                        <%--    <a class="icon-button" href="#" onclick="showMenu('../plugins/Reminders.aspx')" title="<%= (Session["lang"] == "0") ? "Reminders" : "التذكيرات"%>">
+                                <i class="fas fa-bell"></i>
+                            </a>--%>
+                        <div class="icon-notif dropdown  nav-dropholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" id="Group_1858" data-name="Group 1858" width="19.896"
+                                height="25.416" viewBox="0 0 19.896 25.416" id="dLabel" type="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" class="drop-holder">
+                                <g id="Group_1855" data-name="Group 1855" transform="translate(0)">
+                                    <g id="Group_1854" data-name="Group 1854">
+                                        <path id="Path_6957" data-name="Path 6957"
+                                            d="M62.5,21.437l-1.708-3.031a9.446,9.446,0,0,1-1.206-4.632V11.119a7.376,7.376,0,0,0-4.974-7.1v-1.9a1.994,1.994,0,1,0-3.979,0v1.9a7.376,7.376,0,0,0-4.974,7.1v2.655a9.452,9.452,0,0,1-1.2,4.631l-1.708,3.031a.558.558,0,0,0-.006.534.492.492,0,0,0,.432.269h18.9a.494.494,0,0,0,.433-.268A.561.561,0,0,0,62.5,21.437Z"
+                                            transform="translate(-42.675)" fill="#484848" />
+                                    </g>
+                                </g>
+                                <g id="Group_1857" data-name="Group 1857" transform="translate(6.613 23.298)">
+                                    <g id="Group_1856" data-name="Group 1856">
+                                        <path id="Path_6958" data-name="Path 6958"
+                                            d="M188.815,469.333a3.684,3.684,0,0,0,6.67,0Z"
+                                            transform="translate(-188.815 -469.333)" fill="#484848" />
+                                    </g>
+                                </g>
+                            </svg>
+                            <ul class="dropdown-menu" aria-labelledby="dLabel">
+                                <li class="dropnav-header">
+                                    <p class="dropnav-title">الاشعارات</p>
+                                    <div class="dropnav-options">
+                                        <div class="droptwo dropdown">
+                                            <div id="drop2" class="btn-dropdown-holder" type="button" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <span class="filter-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15.9"
+                                                        viewBox="0 0 16 15.9">
+                                                        <g id="Group_3080" data-name="Group 3080"
+                                                            transform="translate(0.322 -0.424)">
+                                                            <g id="Group_3079" data-name="Group 3079"
+                                                                transform="translate(0 0)">
+                                                                <g id="Group_3078" data-name="Group 3078"
+                                                                    transform="translate(0)">
+                                                                    <path id="Path_7152" data-name="Path 7152"
+                                                                        d="M32.153,70.888a.509.509,0,0,1,.144.351v7.437l3.194-2.731V71.239a.509.509,0,0,1,.144-.351L41.038,65H26.75Z"
+                                                                        transform="translate(-26.39 -62.351)"
+                                                                        fill="#8f9198" />
+                                                                    <rect id="Rectangle_971" data-name="Rectangle 971"
+                                                                        width="16" height="1"
+                                                                        transform="translate(-0.322 0.424)"
+                                                                        fill="#8f9198" />
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+
+                                                </span>
+                                                تصفية
+                                            </div>
+                                            <ul class="dropdown-menu" aria-labelledby="drop2">
+                                                <li>
+                                                    <div class="radio-input-holder">
+                                                        <input type="checkbox" id="add55">
+                                                        <label for="add55">ترتيب حسب الأحدث</label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="radio-input-holder">
+                                                        <input type="checkbox" id="add66">
+                                                        <label for="add66">عرض الكل</label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="btn-clear-all" onclick="removeNotifyItemAll(this,event);">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="11.963" height="11.963"
+                                                viewBox="0 0 11.963 11.963">
+                                                <g id="Group_21" data-name="Group 21"
+                                                    transform="translate(5.981 -3.153) rotate(45)">
+                                                    <line id="Line_28" data-name="Line 28" y2="12.918"
+                                                        transform="translate(6.459)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-width="2">
+                                                    </line>
+                                                    <line id="Line_29" data-name="Line 29" x2="12.918"
+                                                        transform="translate(0 6.459)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-width="2">
+                                                    </line>
+                                                </g>
+                                            </svg>
+
+                                            مسح الكل
+                                        </div>
+
+                                        <div class="btn-open-dropnav">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.983" height="16.366"
+                                                viewBox="0 0 16.983 16.366">
+                                                <g id="Group_3108" data-name="Group 3108"
+                                                    transform="translate(-382.637 -457.964)">
+                                                    <path id="Path_6976" data-name="Path 6976"
+                                                        d="M0,6.763V2.593l.967.967L4.526,0,6.763,2.237,3.2,5.8l.967.967Z"
+                                                        transform="translate(399.62 464.727) rotate(180)" fill="#fff">
+                                                    </path>
+                                                    <path id="Path_6977" data-name="Path 6977"
+                                                        d="M6.763,6.763V2.593L5.8,3.56,2.237,0,0,2.237,3.56,5.8l-.967.967Z"
+                                                        transform="translate(389.4 464.727) rotate(180)" fill="#fff">
+                                                    </path>
+                                                    <path id="Path_6978" data-name="Path 6978"
+                                                        d="M0,0V4.17L.967,3.2l3.56,3.559L6.763,4.526,3.2.967,4.17,0Z"
+                                                        transform="translate(399.62 474.33) rotate(180)" fill="#fff">
+                                                    </path>
+                                                    <path id="Path_6979" data-name="Path 6979"
+                                                        d="M6.763,0V4.17L5.8,3.2l-3.56,3.56L0,4.526,3.56.967,2.593,0Z"
+                                                        transform="translate(389.4 474.33) rotate(180)" fill="#fff">
+                                                    </path>
+                                                </g>
+                                            </svg>
+
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="scroll-theme" id="div-notification-header">
+                                        <div class="nav-dropholder-item">
+                                            <img src="../img/Pulse-1s-200px.gif" height="50px" style="margin: auto" />
+                                        </div>
+                                        <%--<div class="nav-dropholder-item">
+                                                <div class="avatar">
+                                                    <img src="img/icon-nav-user.png" class="bg-cover ">
+                                                </div>
+                                                <p class="msg">
+                                                    <span class="user-name">زيدان يونس</span>هذا النص مثال لى نص هذا
+                                            النص مثال لى نص هذا النص مثال لى نص هذا النص مثال لى نص هذا النص مثال لى نص
+                                            هذا النص مثال لى نص هذا النص مثال لى نص هذا النص مثال لى نص هذا النص مثال لى
+                                            نص <span class="remove-item
+                                            ">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="11.963" height="11.963"
+                                                    viewBox="0 0 11.963 11.963">
+                                                    <g id="Group_21" data-name="Group 21"
+                                                        transform="translate(5.981 -3.153) rotate(45)">
+                                                        <line id="Line_28" data-name="Line 28" y2="12.918"
+                                                            transform="translate(6.459)" fill="none" stroke="#fff"
+                                                            stroke-linecap="round" stroke-width="2">
+                                                        </line>
+                                                        <line id="Line_29" data-name="Line 29" x2="12.918"
+                                                            transform="translate(0 6.459)" fill="none" stroke="#fff"
+                                                            stroke-linecap="round" stroke-width="2">
+                                                        </line>
+                                                    </g>
+                                                </svg></span>
+                                                </p>
+                                                <p class="info">
+                                                    <span class="group">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            id="Group_1787" data-name="Group 1787" width="27.34" height="22.534"
+                                                            viewBox="0 0 27.34 22.534">
+                                                            <path id="Path_6934" data-name="Path 6934"
+                                                                d="M255.352,77.4h11.835a.41.41,0,0,0,.41-.41V75.41a.41.41,0,0,0-.41-.41H254.222a.41.41,0,0,0-.334.649l1.13,1.582A.411.411,0,0,0,255.352,77.4Z"
+                                                                transform="translate(-240.258 -73.398)" fill="#484848">
+                                                            </path>
+                                                            <path id="Path_6935" data-name="Path 6935"
+                                                                d="M8.909,45H2.225A2.225,2.225,0,0,0,0,47.225V65.31a2.225,2.225,0,0,0,2.225,2.225H25.116A2.225,2.225,0,0,0,27.34,65.31V52.832a2.225,2.225,0,0,0-2.225-2.225H15.2a2.225,2.225,0,0,1-1.81-.932l-2.674-3.744A2.225,2.225,0,0,0,8.909,45Z"
+                                                                transform="translate(0 -45)" fill="#484848">
+                                                            </path>
+                                                        </svg></span><span class="time"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            id="Group_2143" data-name="Group 2143" width="19" height="19"
+                                                            viewBox="0 0 19 19">
+                                                            <path id="Path_6985" data-name="Path 6985"
+                                                                d="M9.5,0A9.5,9.5,0,1,0,19,9.5,9.511,9.511,0,0,0,9.5,0Zm0,17.812A8.312,8.312,0,1,1,17.812,9.5,8.322,8.322,0,0,1,9.5,17.812Z"
+                                                                fill="#484848">
+                                                            </path>
+                                                            <path id="Path_6986" data-name="Path 6986"
+                                                                d="M241.187,96H240v6.183l3.736,3.736.84-.84-3.388-3.388Z"
+                                                                transform="translate(-231.094 -92.438)" fill="#484848">
+                                                            </path>
+                                                        </svg>
+                                                            8س</span>
+                                                </p>
+                                            </div>--%>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="icon-mail dropdown nav-dropholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" id="Group_1778" data-name="Group 1778" width="24.782"
+                                height="19.342" viewBox="0 0 24.782 19.342" id="dLabel" type="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" class="drop-holder">
+                                <g id="Group_1778-2" data-name="Group 1778">
+                                    <path id="Path_6927" data-name="Path 6927"
+                                        d="M24.781,73.062a1.1,1.1,0,0,0-.147-.481l-4.646-8.059A1.024,1.024,0,0,0,19.1,64H5.681a1.024,1.024,0,0,0-.885.522L.149,72.581A1.1,1.1,0,0,0,0,73.062c0,.025,0,8.132,0,8.132a2.111,2.111,0,0,0,2.065,2.149H22.716a2.111,2.111,0,0,0,2.065-2.149S24.785,73.087,24.781,73.062ZM19.619,72.6a2.111,2.111,0,0,0-2.065,2.149,1.055,1.055,0,0,1-1.032,1.075H8.262a1.055,1.055,0,0,1-1.032-1.075A2.111,2.111,0,0,0,5.165,72.6H2.549l3.717-6.447H18.518L22.235,72.6Z"
+                                        transform="translate(-0.001 -64)" fill="#484848" />
+                                </g>
+                            </svg>
+                            <ul class="dropdown-menu" aria-labelledby="dLabel">
+                                <li class="dropnav-header">
+                                    <p class="dropnav-title"><%= (Session["lang"] == "0") ? "Mail" : "البريد"%></p>
+                                    <div class="dropnav-options">
+                                        <div class="droptwo dropdown">
+                                            <div id="drop3" class="btn-dropdown-holder" type="button" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <span class="filter-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15.9"
+                                                        viewBox="0 0 16 15.9">
+                                                        <g id="Group_3080" data-name="Group 3080"
+                                                            transform="translate(0.322 -0.424)">
+                                                            <g id="Group_3079" data-name="Group 3079"
+                                                                transform="translate(0 0)">
+                                                                <g id="Group_3078" data-name="Group 3078"
+                                                                    transform="translate(0)">
+                                                                    <path id="Path_7152" data-name="Path 7152"
+                                                                        d="M32.153,70.888a.509.509,0,0,1,.144.351v7.437l3.194-2.731V71.239a.509.509,0,0,1,.144-.351L41.038,65H26.75Z"
+                                                                        transform="translate(-26.39 -62.351)"
+                                                                        fill="#8f9198" />
+                                                                    <rect id="Rectangle_971" data-name="Rectangle 971"
+                                                                        width="16" height="1"
+                                                                        transform="translate(-0.322 0.424)"
+                                                                        fill="#8f9198" />
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+
+                                                </span>
+                                                تصفية
+                                            </div>
+                                            <ul class="dropdown-menu" aria-labelledby="drop3">
+                                                <li>
+                                                    <div class="radio-input-holder">
+                                                        <input type="checkbox" id="add555">
+                                                        <label for="add555">ترتيب حسب الأحدث</label>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="radio-input-holder">
+                                                        <input type="checkbox" id="add666">
+                                                        <label for="add666">عرض الكل</label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="btn-clear-all" onclick="removeInboxItemAll(this,event);">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="11.963" height="11.963"
+                                                viewBox="0 0 11.963 11.963">
+                                                <g id="Group_21" data-name="Group 21"
+                                                    transform="translate(5.981 -3.153) rotate(45)">
+                                                    <line id="Line_28" data-name="Line 28" y2="12.918"
+                                                        transform="translate(6.459)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-width="2">
+                                                    </line>
+                                                    <line id="Line_29" data-name="Line 29" x2="12.918"
+                                                        transform="translate(0 6.459)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-width="2">
+                                                    </line>
+                                                </g>
+                                            </svg>
+
+                                            مسح الكل
+                                        </div>
+
+                                        <div class="btn-open-dropnav" onclick="addTab('6','<%= (Session["lang"] == "0") ? "Mail" : "البريد"%>','myWorkflowDocs',99)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.983" height="16.366"
+                                                viewBox="0 0 16.983 16.366">
+                                                <g id="Group_3108" data-name="Group 3108"
+                                                    transform="translate(-382.637 -457.964)">
+                                                    <path id="Path_6976" data-name="Path 6976"
+                                                        d="M0,6.763V2.593l.967.967L4.526,0,6.763,2.237,3.2,5.8l.967.967Z"
+                                                        transform="translate(399.62 464.727) rotate(180)" fill="#fff">
+                                                    </path>
+                                                    <path id="Path_6977" data-name="Path 6977"
+                                                        d="M6.763,6.763V2.593L5.8,3.56,2.237,0,0,2.237,3.56,5.8l-.967.967Z"
+                                                        transform="translate(389.4 464.727) rotate(180)" fill="#fff">
+                                                    </path>
+                                                    <path id="Path_6978" data-name="Path 6978"
+                                                        d="M0,0V4.17L.967,3.2l3.56,3.559L6.763,4.526,3.2.967,4.17,0Z"
+                                                        transform="translate(399.62 474.33) rotate(180)" fill="#fff">
+                                                    </path>
+                                                    <path id="Path_6979" data-name="Path 6979"
+                                                        d="M6.763,0V4.17L5.8,3.2l-3.56,3.56L0,4.526,3.56.967,2.593,0Z"
+                                                        transform="translate(389.4 474.33) rotate(180)" fill="#fff">
+                                                    </path>
+                                                </g>
+                                            </svg>
+
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="scroll-theme" id="div-inbox-header">
+                                        <div class="nav-dropholder-item">
+                                            <img src="../img/Pulse-1s-200px.gif" height="50px" style="margin: auto" />
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="nav-lang-holder">
+                        <div class="dropdown-main dropdown" style="margin: 0;">
+                            <div id="drop1" class="btn-dropdown-holder" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    width="31.416px" height="31.416px" style="width: 15px; height: 15px; margin-inline-end: 5px; fill: #454545;" viewBox="0 0 31.416 31.416" style="enable-background: new 0 0 31.416 31.416;"
+                                    xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M28.755,6.968l-0.47,0.149L25.782,7.34l-0.707,1.129l-0.513-0.163L22.57,6.51l-0.289-0.934L21.894,4.58l-1.252-1.123
+			l-1.477-0.289l-0.034,0.676l1.447,1.412l0.708,0.834L20.49,6.506l-0.648-0.191L18.871,5.91l0.033-0.783l-1.274-0.524l-0.423,1.841
+			l-1.284,0.291l0.127,1.027l1.673,0.322l0.289-1.641l1.381,0.204l0.642,0.376h1.03l0.705,1.412l1.869,1.896l-0.137,0.737
+			l-1.507-0.192l-2.604,1.315l-1.875,2.249l-0.244,0.996h-0.673l-1.254-0.578l-1.218,0.578l0.303,1.285l0.53-0.611l0.932-0.029
+			l-0.065,1.154l0.772,0.226l0.771,0.866l1.259-0.354l1.438,0.227l1.67,0.449l0.834,0.098l1.414,1.605l2.729,1.605l-1.765,3.372
+			l-1.863,0.866l-0.707,1.927l-2.696,1.8l-0.287,1.038c6.892-1.66,12.019-7.851,12.019-15.253
+			C31.413,12.474,30.433,9.465,28.755,6.968z" />
+                                            <path d="M17.515,23.917l-1.144-2.121l1.05-2.188l-1.05-0.314l-1.179-1.184l-2.612-0.586l-0.867-1.814v1.077h-0.382l-2.251-3.052
+			v-2.507L7.43,8.545L4.81,9.012H3.045L2.157,8.43L3.29,7.532L2.16,7.793c-1.362,2.326-2.156,5.025-2.156,7.916
+			c0,8.673,7.031,15.707,15.705,15.707c0.668,0,1.323-0.059,1.971-0.137l-0.164-1.903c0,0,0.721-2.826,0.721-2.922
+			C18.236,26.357,17.515,23.917,17.515,23.917z" />
+                                            <path d="M5.84,5.065l2.79-0.389l1.286-0.705l1.447,0.417l2.312-0.128l0.792-1.245l1.155,0.19l2.805-0.263L19.2,2.09l1.09-0.728
+			l1.542,0.232l0.562-0.085C20.363,0.553,18.103,0,15.708,0C10.833,0,6.474,2.222,3.596,5.711h0.008L5.84,5.065z M16.372,1.562
+			l1.604-0.883l1.03,0.595l-1.491,1.135l-1.424,0.143l-0.641-0.416L16.372,1.562z M11.621,1.691l0.708,0.295l0.927-0.295
+			l0.505,0.875l-2.14,0.562l-1.029-0.602C10.591,2.526,11.598,1.878,11.621,1.691z" />
+                                        </g>
+                                    </g>
+                                </svg>
+
+                                <span class="dropdown-title"><%= (Session["lang"] == "0") ? "English" : "العربيه"%></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12.204" height="7.118"
+                                    viewBox="0 0 12.204 7.118">
+                                    <g id="Group_3106" data-name="Group 3106"
+                                        transform="translate(11.704 0.556) rotate(90)">
+                                        <g id="Group_2125" data-name="Group 2125">
+                                            <path id="Path_6981" data-name="Path 6981"
+                                                d="M5.88,5.268.732.12A.429.429,0,0,0,.126.727L4.97,5.571.126,10.416a.429.429,0,1,0,.607.607L5.88,5.875A.429.429,0,0,0,5.88,5.268Z"
+                                                fill="#8f9198" stroke="#8f9198" stroke-width="1">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg>
+
+                            </div>
+                            <ul class="dropdown-menu" aria-labelledby="drop1">
+                                <li data-id="0" onclick="dialog(this);">English</li>
+                                <li data-id="1" onclick="dialog(this);">العربيه</li>
+                            </ul>
+                            <asp:DropDownList ID="DropDownListLang" runat="server" OnSelectedIndexChanged="ddlChangeLang_ServerChange" CssClass="hidde-this">
+                                <asp:ListItem Value="0">English</asp:ListItem>
+                                <asp:ListItem Value="1">العربيه</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                    </div>
+                    <div class="nav-user-holder  dropdown">
+                        <div id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            class="drop-holder">
+                            <%= (Session["lang"] == "0") ? "Welcome" : "اهلا بك"%>
+                            <span class="username">
+                                <asp:Label ID="lblWelcome" runat="server" Style="cursor: pointer;"></asp:Label>
+                            </span>
+                            <div class="nav-user-pp">
+                                <img src='<%= "/Images/Users/" + Session["userID"] + ".png" %>' class="bg-cover ">
+                            </div>
+                        </div>
+                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+                            <li data-toggle="modal" data-target="#modal-acc" id="liProfile" runat="server" onclick="clearframe()">
+                                <svg id="Group_1779" data-name="Group 1779" xmlns="http://www.w3.org/2000/svg"
+                                    width="24.869" height="24.621" viewBox="0 0 24.869 24.621">
+                                    <g id="Group_1780" data-name="Group 1780" transform="translate(6.648)">
+                                        <g id="Group_1779-2" data-name="Group 1779" transform="translate(0)">
+                                            <path id="Path_6928" data-name="Path 6928"
+                                                d="M126.786,0a5.786,5.786,0,1,0,5.786,5.786A5.793,5.793,0,0,0,126.786,0Z"
+                                                transform="translate(-121)" fill="#484848">
+                                            </path>
+                                        </g>
+                                    </g>
+                                    <g id="Group_1782" data-name="Group 1782" transform="translate(0 12.905)">
+                                        <g id="Group_1781" data-name="Group 1781" transform="translate(0)">
+                                            <path id="Path_6929" data-name="Path 6929"
+                                                d="M52.717,303.216A10.636,10.636,0,0,0,45.093,300H41.777a10.636,10.636,0,0,0-7.625,3.216A10.873,10.873,0,0,0,31,310.887a.829.829,0,0,0,.829.829H55.04a.829.829,0,0,0,.829-.829A10.873,10.873,0,0,0,52.717,303.216Z"
+                                                transform="translate(-31 -300)" fill="#484848">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span id="lblmypersonalfile" runat="server">ملفي الشخصي</span>
+                            </li>
+                            <li onclick="sessionStorage.setItem('currentTabs', '');$('#lnkSignOut').click();">
+                                <input type="button" id="lnkSignOut" runat="server" style="display: none" onserverclick="lnkSignOut_Click" />
+                                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512"
+                                    style="enable-background: new 0 0 512 512;" xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <g>
+                                                <path
+                                                    d="M510.371,226.513c-1.088-2.603-2.645-4.971-4.629-6.955l-63.979-63.979c-8.341-8.32-21.824-8.32-30.165,0
+                                       c-8.341,8.341-8.341,21.845,0,30.165l27.584,27.584H320.013c-11.797,0-21.333,9.557-21.333,21.333s9.536,21.333,21.333,21.333
+                                       h119.168l-27.584,27.584c-8.341,8.341-8.341,21.845,0,30.165c4.16,4.181,9.621,6.251,15.083,6.251s10.923-2.069,15.083-6.251
+                                       l63.979-63.979c1.984-1.963,3.541-4.331,4.629-6.955C512.525,237.606,512.525,231.718,510.371,226.513z" />
+                                                <path
+                                                    d="M362.68,298.667c-11.797,0-21.333,9.557-21.333,21.333v106.667h-85.333V85.333c0-9.408-6.187-17.728-15.211-20.437
+                                       l-74.091-22.229h174.635v106.667c0,11.776,9.536,21.333,21.333,21.333s21.333-9.557,21.333-21.333v-128
+                                       C384.013,9.557,374.477,0,362.68,0H21.347c-0.768,0-1.451,0.32-2.197,0.405c-1.003,0.107-1.92,0.277-2.88,0.512
+                                       c-2.24,0.576-4.267,1.451-6.165,2.645c-0.469,0.299-1.045,0.32-1.493,0.661C8.44,4.352,8.376,4.587,8.205,4.715
+                                       C5.88,6.549,3.939,8.789,2.531,11.456c-0.299,0.576-0.363,1.195-0.597,1.792c-0.683,1.621-1.429,3.2-1.685,4.992
+                                       c-0.107,0.64,0.085,1.237,0.064,1.856c-0.021,0.427-0.299,0.811-0.299,1.237V448c0,10.176,7.189,18.923,17.152,20.907
+                                       l213.333,42.667c1.387,0.299,2.795,0.427,4.181,0.427c4.885,0,9.685-1.685,13.525-4.843c4.928-4.053,7.808-10.091,7.808-16.491
+                                       v-21.333H362.68c11.797,0,21.333-9.557,21.333-21.333V320C384.013,308.224,374.477,298.667,362.68,298.667z" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <%= (Session["lang"] == "0") ? "Logout" : "خروج"%>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="nav-page-tabs">
+                <div class="pages-tabs-holder swiper-container">
+                    <ul class="swiper-wrapper" id="sortableTabs" style="<%= (Session["lang"] == "0") ? "" : "direction:ltr;justify-content: flex-end;"%>">
+                        <li class="item swiper-slide swiper-no-swiping ui-state-default page-tab-active dashboard-tap" data-id="32" data-index="0" data-tab="tab-32" onclick="callThisTab(this);"><%= (Session["lang"] == "0") ? "DashBoard" : "لوحة القيادة"%></li>
+                    </ul>
+                </div>
+                <div class="pages-tabs-arrow swiper-button-next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="8.231"
+                        height="15.279" viewBox="0 0 8.231 15.279">
+                        <g id="Group_2126" data-name="Group 2126" transform="translate(8.231 15.279) rotate(180)">
+                            <g id="Group_2125" data-name="Group 2125" transform="translate(0 0)">
+                                <path id="Path_6981" data-name="Path 6981"
+                                    d="M8.059,7.22,1,.165A.588.588,0,0,0,.172,1l6.64,6.64-6.64,6.64A.588.588,0,1,0,1,15.107L8.059,8.052A.588.588,0,0,0,8.059,7.22Z"
+                                    fill="#484848">
+                                </path>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="pages-tabs-arrow swiper-button-prev">
+                    <svg id="Group_3108" data-name="Group 3108"
+                        xmlns="http://www.w3.org/2000/svg" width="8.231" height="15.279" viewBox="0 0 8.231 15.279">
+                        <g id="Group_2125" data-name="Group 2125" transform="translate(0 0)">
+                            <path id="Path_6981" data-name="Path 6981"
+                                d="M8.059,7.22,1,.165A.588.588,0,0,0,.172,1l6.64,6.64-6.64,6.64A.588.588,0,1,0,1,15.107L8.059,8.052A.588.588,0,0,0,8.059,7.22Z"
+                                fill="#484848">
+                            </path>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="btn-close-pages-tabs btn-close-pages-tabs-new" onclick="closeAllTabs();" title="<%= (Session["lang"] == "0") ? "Close all tabs" : "إغلاق جميع النوافذ"%>" data-toggle="tooltip" data-placement="top" id="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11.963" height="11.963" viewBox="0 0 11.963 11.963">
+                        <g id="Group_21" data-name="Group 21" transform="translate(5.981 -3.153) rotate(45)">
+                            <line id="Line_28" data-name="Line 28" y2="12.918" transform="translate(6.459)" fill="none"
+                                stroke="#fff" stroke-linecap="round" stroke-width="2" />
+                            <line id="Line_29" data-name="Line 29" x2="12.918" transform="translate(0 6.459)" fill="none"
+                                stroke="#fff" stroke-linecap="round" stroke-width="2" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </header>
+        <cc1:ModalPopupExtender ID="mp1" runat="server" PopupControlID="PanlProfile" TargetControlID="liProfile"
+            CancelControlID="btnClosePanlProfile" BackgroundCssClass="BackgroundProfile">
+        </cc1:ModalPopupExtender>
+        <asp:Panel ID="PanlProfile" runat="server" CssClass="Popup" align="center" Style="display: none">
+            <iframe style="width: 600px; height: 520px; border-radius: 20px;" id="irm1" src="../admin/UpdateProfile.aspx" runat="server"></iframe>
+            <asp:Button ID="btnClosePanlProfile" runat="server" Text="Close" Style="display: none;" />
+        </asp:Panel>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+
+        <div id="menu" class="menu-overlay">
+            <!--Creates the popup content-->
+            <div class="menu-content">
+                <%-- <iframe id="menuIFrame" src="test-subpage.html" class="iframe-subpage"></iframe>--%>
+            </div>
+        </div>
+        <%--<img src="/Images/loading.gif" class="loading" />--%>
+    </form>
+    <asp:ContentPlaceHolder runat="server" ID="outForm"></asp:ContentPlaceHolder>
+    <div class="loader-holder" style="display: none;">
+        <img src="/Assets/UIKIT/img/loader.svg" class="loader-img">
+    </div>
+    <div class="modal my-modal" id="changeLangx-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="background-color: rgba(0,0,0,0.4);">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <!-- <div class="modal-body">
+                            </div> -->
+                <div class="modal-footer">
+                    <button type="button" class="btn-done-model"><%= (Session["lang"].ToString() == "0") ? "Ok" : "نعم"%></button>
+                    <button type="button" class="btn-close-model" data-dismiss="modal">
+                        <span class="icon-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="11.963" height="11.963"
+                                viewBox="0 0 11.963 11.963">
+                                <g id="Group_21" data-name="Group 21"
+                                    transform="translate(5.981 -3.153) rotate(45)">
+                                    <line id="Line_28" data-name="Line 28" y2="12.918" transform="translate(6.459)"
+                                        fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2">
+                                    </line>
+                                    <line id="Line_29" data-name="Line 29" x2="12.918"
+                                        transform="translate(0 6.459)" fill="none" stroke="#fff"
+                                        stroke-linecap="round" stroke-width="2">
+                                    </line>
+                                </g>
+                            </svg>
+                        </span>
+                        <%= (Session["lang"].ToString() == "0") ? "Cancel" : "تراجع"%>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootbox@5.5.2/bootbox.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"></script>
+    <script src="../Assets/UIKIT/js/Sortable.min.js"></script>
+    <script src="/Assets/UIKIT/js/Chart.min.js"></script>
+    <script src="/Assets/UIKIT/js/utils.js"></script>
+    <script src="/Assets/UIKIT/js/main.min.js"></script>
+    <script src="/Assets/UIKIT/js/script.js"></script>
+    <link href="../Scripts/jquery-toast-plugin-master/jquery.toast.min.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-toast-plugin-master/jquery.toast.min.js"></script>
+    <script src="../JS/js-ta.js"></script>
+    <%-- <script src="../Scripts/color-picker.min.js"></script>--%>
+    <%--<script type='text/javascript'>
+        var lang =<%= (Session["lang"].ToString() == "0") ? "'en'" : "'ar'"%>;
+        function showSearchDlg() {
+            dialogCount += 1;
+
+            var searchURL = "../Screen/searchResult.aspx?stxt=" + document.getElementById("txtSearch").value;
+            var PageName = '<%= (Session["lang"].ToString() == "0") ? "Search" : "بحث"%>';
+            var dlg = document.getElementById("dialog_" + String(dialogCount))
+            if (dlg == null) {
+                var s = "<div onmousedown=\"activeDialog('" + String(dialogCount) + "')\" style='position:absolute; border:1px solid gray' id=\"dialog_" + String(dialogCount) + "\" class=\"ui-widget-content\" >";
+                s += " <table dir='<%= (Session["lang"].ToString() == "0") ? "ltr" : "rtl"%>' cellpadding='0' cellspacing='0' width='100%'";
+                s += " style='height:39px;background-color:#959595'>";
+                s += " <tr><td valign='middle' align='<%= (Session["lang"].ToString() == "0") ? "left" : "right"%>' style='padding-left:5px; width:26px'>";
+                s += " <div style='width:50px;height:46px;background:url(../Images/Icons/iconSearch.png) 0 -62px' /></td>";
+                s += " <td valign='middle' style='padding-left:5px'><span style='text-shadow:1px 1px 1px #000;color:white;text-align: <%= (Session["lang"].ToString() == "0") ? "left" : "right"%>;font-size: 19px;font-weight: bold;'> <%= (Session["lang"].ToString() == "0") ? "Search" : "بحث"%></span>";
+                s += " </td><td align='<%= (Session["lang"].ToString() == "0") ? "right" : "left"%>' valign='bottom'>";
+                s += " <img title='Minimize Window' width='32px' style='cursor:pointer' src='../Images/blue_Icons/minimize-icon.png' onclick=\"minimizeWindow('" + String(dialogCount) + "','" + PageName + "')\" /> ";
+                s += " <img title='Refresh Window' width='32px' style='cursor:pointer' src='../Images/blue_Icons/refresh-Icon.png' onclick=\"refreshDialog('" + String(dialogCount) + "','searchResult')\" /> ";
+                s += " <img title='Close Window' width='32px' style='cursor:pointer' src='../Images/blue_Icons/close-Icon.png' onclick=\"hideDialog('" + String(dialogCount) + "')\" /></td></tr></table>";
+                s += " <iframe style=\"background-color:#ffffff\" id=\"frame_" + String(dialogCount) + "\" src='subPages.aspx'></iframe>";
+                s += " </div>";
+
+                $("#mainCont").append(s);
+            }
+
+            var defWidth = 850;
+            var defHeigh = 500;
+            $("#dialog_" + String(dialogCount)).width(0);
+            $("#dialog_" + String(dialogCount)).height(0);
+            $("#dialog_" + String(dialogCount)).css("top", String(($(window).height() / 2) - (defHeigh / 2)) + "px");
+            $("#dialog_" + String(dialogCount)).css("left", String(($(window).width() / 2) - (defWidth / 2)) + "px");
+            $("#dialog_" + String(dialogCount)).show();
+            $("#dialog_" + String(dialogCount)).animate({ width: defWidth, height: defHeigh }, "slow");
+            $("#frame_" + String(dialogCount)).animate({ width: defWidth - 6, height: defHeigh - 50 }, "slow");
+            $("#dialog_" + String(dialogCount)).draggable();
+            $("#dialog_" + String(dialogCount)).resizable({
+                resize: function (event, ui) {
+                    var currentId = $(this).attr('id');
+                    var n = currentId.split("_");
+                    $("#frame_" + n[1]).height($(this).height() - 50);
+                    $("#frame_" + n[1]).width($(this).width() - 6);
+                }
+            });
+            document.getElementById("frame_" + String(dialogCount)).src = searchURL;
+            activeDialog(String(dialogCount));
+
+        }
+
+        function changeBackground() {
+            $('body').css("background-image", "url(/Images/bg_" + $("#createdHiddenuserId").val() + ".jpg)");
+            $('body').css("background-repeat", "Repeat");
+            $('body').css("background-size", "initial");
+        }
+        $(function () {
+            $('body').css("background-image", "url(/Images/bg_" + $("#createdHiddenuserId").val() + ".jpg)");
+            $('body').css("background-repeat", "Repeat");
+            $('body').css("background-size", "initial");
+
+            //alert($(window).height());
+            //$('#main-div').css({
+            //    "background-image": "url(../Images/DMSLogo.png)", "background-repeat": "no-repeat", "background-attachment": "fixed", "background-position": "right bottom"
+            //    , "height": String(($(window).height())) + "px"
+            //});
+            ////$('#main-content').css({ 'height': (($(document).height()) - 162) + 'px' });
+
+
+            //$(window).resize(function () {
+            //    $('#main-div').css({
+            //        "background-image": "url(../Images/DMSLogo.png)", "background-repeat": "no-repeat", "background-attachment": "fixed", "background-position": "right bottom"
+            //    , "height": String(($(window).height())) + "px"
+            //    });
+
+            //});
+        });
+    </script>
+    <script src="../JS/jquery-Ifram-tracker.js"></script>
+    <script>
+        var minFlag = 1;
+        function minimize() {
+            if (minFlag == 0) {
+                $("#logoImg").animate({ height: "60px" });
+                $(".imgtitle").hide();
+                $("#iconscontent").animate({ width: "80px" });
+                $(".menuDiv").width("65px");
+                $("#tabs").animate({ width: "+=150px", left: "-=150px" });
+                //$("#tabs").animate({  });
+            }
+            else {
+                $("#logoImg").animate({ height: "114px" });
+                $(".menuDiv").width("220px");
+                $("#iconscontent").animate({ width: "230px" });
+                $("#tabs").animate({ width: "-=150px", left: "+=150px" });
+                //$("#tabs").animate({  });
+                $(".imgtitle").delay(200).fadeIn(1000);
+                minFlag = -1;
+            }
+            minFlag += 1;
+        }
+        var animCalled = false;
+        function minmaxbyid(flg) {
+            //if (flg == 0) {
+            if ($(".imgtitle").is(":visible") == true) {
+                $("#logoImg").animate({ height: "60px" });
+                $("#iconscontent").animate({ width: "80px" });
+                $(".menuDiv").width("65px");
+                $("#tabs").animate({ width: "+=150px", left: "-=150px" });
+                $(".imgtitle").hide();
+                animCalled = true;
+            }
+            //}
+        }
+        function minmaxbyid2(flg) {
+            //if (flg == 1) {
+            if ($(".imgtitle").is(":visible") == false) {
+                $("#logoImg").animate({ height: "114px" });
+                $(".menuDiv").width("220px");
+                $("#iconscontent").animate({ width: "230px" });
+                $("#tabs").animate({ width: "-=150px", left: "+=150px" });
+                animCalled = true;
+                $(".imgtitle").delay(0).fadeIn(0);
+            }
+            //}
+        }
+
+        function showMenu(menuURL) {
+            //alert('start');
+            $(".menu-overlay, .menu-content").addClass("active");
+            var x = event.clientX;     // Get the horizontal coordinate
+            var y = event.clientY;     // Get the vertical coordinate
+            $(".menu-overlay, .menu-content").css("left", x - 100);
+            $(".menu-overlay, .menu-content").css("top", y + 10);
+            $("#menuIFrame").attr('src', menuURL);
+            //e.stopPropagation();
+            //alert('done');
+            //$("#hdnReminderMetaID").val(String(metaID));
+        }
+
+        $(document).on("click", ':not(.icon-button,.headerIcons)', function (e) {
+            if (($(e.target).attr("class") != "fas fa-bell") && ($(e.target).attr("class") != "fas fa-flag")) {
+                //alert('remove');
+                //alert($(e.target).attr("class"));
+                if ($(".menu-overlay, .menu-content").hasClass("active")) {
+                    $(".menu-overlay, .menu-content").removeClass("active");
+                }
+            }
+        });
+    </script>
+    <link href="<%= (Session["lang"].ToString() == "0") ? "" : "../css/ltr-menu.css"%>" rel="stylesheet" />
+    <!--  new scripts code -->
+    
+    <!--toaster -->
+    <script src="../Scripts/awsf.min.js"></script>--%>
+    <script src="../Assets/UIKIT/js/modules/master-module.js"></script>
+
+    <script src="../js/feedback.js"></script>
+    <script src="../js/html2canvas.js"></script>
+    <link rel="stylesheet" href="../css/feedback.css" />
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded',
+            function () {
+                $.feedback({
+                    ajaxURL: '/AjexServer/ajexresponse.aspx/FeedbackMessage',
+                    html2canvasURL: '../js/html2canvas.js',
+                    initButtonText: '<%=HudhudResources.Resources.Master_Main_sendcomments%>',
+                    tpl: {
+                        description: '<div id="feedback-welcome"><div class="feedback-logo">Feedback</div><p>Feedback lets you send us suggestions about our products. We welcome problem reports, feature ideas and general comments.</p><p>Start by writing a brief description:</p><textarea id="feedback-note-tmp"></textarea><p>Next we\'ll let you identify areas of the page related to your description.</p><button id="feedback-welcome-next" class="feedback-next-btn feedback-btn-gray">Next</button><div id="feedback-welcome-error">Please enter a description.</div><div class="feedback-wizard-close"></div></div>',
+                        highlighter: '<div id="feedback-highlighter" style="direction: ltr"><button class="feedback-Drag feedback-active"><svg xmlns="https://www.w3.org/2000/svg" focusable="false" aria-label="Drag" fill="#BDBDBD" height="40" width="16" viewBox="-2 2 12 12"><circle cx="1.5" cy="1.5" r="1.5"></circle><circle cx="1.5" cy="7.5" r="1.5"></circle><circle cx="1.5" cy="13.5" r="1.5"></circle><circle cx="6.5" cy="1.5" r="1.5"></circle><circle cx="6.5" cy="7.5" r="1.5"></circle><circle cx="6.5" cy="13.5" r="1.5"></circle></svg></Button><button class="feedback-sethighlight feedback-active" title="<%=HudhudResources.Resources.Master_Main_discrimination%>"><span style="display: inline-block; position: relative; height: 36px; width: 36px;"><svg xmlns="https://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" height="36" width="36" fill="#FDD835"><path d="M3 3h18v18H3z"></path></svg><svg xmlns="https://www.w3.org/2000/svg" focusable="false" aria-label="" fill="#757575" viewBox="0 0 24 24" height="36" width="36" style="left: 0px; position: absolute; top: 0px;"><path d="M21 17h-2.58l2.51 2.56c-.18.69-.73 1.26-1.41 1.44L17 18.5V21h-2v-6h6v2zM19 7h2v2h-2V7zm2-2h-2V3.08c1.1 0 2 .92 2 1.92zm-6-2h2v2h-2V3zm4 8h2v2h-2v-2zM9 21H7v-2h2v2zM5 9H3V7h2v2zm0-5.92V5H3c0-1 1-1.92 2-1.92zM5 17H3v-2h2v2zM9 5H7V3h2v2zm4 0h-2V3h2v2zm0 16h-2v-2h2v2zm-8-8H3v-2h2v2zm0 8.08C3.9 21.08 3 20 3 19h2v2.08z"></path></svg></span></button><button class="feedback-setblackout" title="<%=HudhudResources.Resources.Master_Main_Hiding%>"><span style="display: inline-block; position: relative; height: 36px; width: 36px;"><svg xmlns="https://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24" height="36" width="36" fill="#000"><path d="M3 3h18v18H3z"></path></svg></span></button><button id="feedback-highlighter-next" class="feedback-setnextbtn feedback-active"><span style="display: inline-block; position: relative; height: 30px; width: 36px;"><%=HudhudResources.Resources.Master_Main_Done%></span></button><button id="feedback-highlighter-back" class="feedback-back-btn feedback-btn-gray">Back</button><div class="feedback-highlighter-close"></div></div>',
+                        overview: '<div id="feedback-overview"><div class="feedback-logo">Feedback</div><div id="feedback-overview-description"><div id="feedback-overview-description-text"><h3><%=HudhudResources.Resources.Master_Main_comment%></h3><h3 class="feedback-additional">Additional info</h3><div id="feedback-additional-none"><span>None</span></div><div id="feedback-browser-info"><span>Browser Info</span></div><div id="feedback-page-info"><span>Page Info</span></div><div id="feedback-page-structure"><span>Page Structure</span></div></div></div><div id="feedback-overview-screenshot"><h3><%=HudhudResources.Resources.Master_Main_ScreenCapture%></h3><button id="feedback-overview-back"><%=HudhudResources.Resources.Master_Main_Tohighlightorhideinformationclick%></button></div><div class="feedback-buttons"><button id="feedback-submit" class="feedback-submit-btn feedback-btn-gray"><%=HudhudResources.Resources.Master_Main_send%></button></div><div id="feedback-overview-error"><%=HudhudResources.Resources.Master_Main_Pleasewriteacomment%></div><div class="feedback-close-btn feedback-btn-gray"><%=HudhudResources.Resources.Master_Main_Cancellation%></div></div>',
+                        submitSuccess: '<div id="feedback-submit-success"><div class="feedback-logo">Feedback</div><p><%=HudhudResources.Resources.Master_Main_Thankyouforyourfeedback%>.</p><button class="feedback-close-btn feedback-btn-blue"><%=HudhudResources.Resources.Master_Main_OK%></button><div class="feedback-wizard-close"></div></div>',
+                        submitError: '<div id="feedback-submit-error"><div class="feedback-logo">Feedback</div><p><%=HudhudResources.Resources.Master_Main_Unfortunatelyanerroroccurredwhilesending%>.</p><button class="feedback-close-btn feedback-btn-blue"><%=HudhudResources.Resources.Master_Main_OK%></button><div class="feedback-wizard-close"></div></div>'
+                    }
+                });
+            }, false);
+    </script>
+    <script type="text/javascript">
+        function ShowProgress() {
+            $(".loader-holder").show();
+            setTimeout(function () {
+                $(".loader-holder").hide();
+            }, 200);
+        }
+        $('form').on("submit", function () {
+
+            ShowProgress();
+        });
+    </script>
+    <script type="text/javascript">
+        (function () {
+            var s = document.createElement("script");
+            s.type = "text/javascript"; s.async = true; s.src = 'https://api.klynd.com/api/project/5ffc82d8d885527b987f34c5/603543447817f724e738eb62/' + btoa(window.location.host);
+            s.onload = (function () { window.top.postMessage({ type: 'scriptLoaded' }, "*"); });
+            localStorage.setItem('klPID', JSON.stringify('603543447817f724e738eb62'));
+            var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+        })();
+    </script>
+    <style>
+        .ui-draggable .ui-dialog-titlebar {
+            display: none;
+        }
+
+        .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+            width: 600px !important;
+            height: 125px !important;
+            border-radius: 8px !important;
+        }
+
+        #changeLangx-confirm, #changeLangx-confirm .modal-dialog {
+            padding: unset !important;
+            margin: unset !important;
+            background-color: #ffffff !important;
+            border-color: #ffffff !important;
+        }
+
+        .my-modal .modal-content {
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: unset !important;
+        }
+
+        #changeLangx-confirm {
+            position: sticky !important;
+        }
+    </style>
+</body>
+</html>

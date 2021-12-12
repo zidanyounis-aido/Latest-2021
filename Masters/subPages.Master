@@ -1,0 +1,112 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="subPages.master.cs" Inherits="dms.Masters.subPages" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<!DOCTYPE html>
+<html class="scroll-theme">
+<head runat="server">
+    <title></title>
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.22/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/Assets/UIKIT/css/bootstrap.css">
+    <link rel="stylesheet" runat="server" id="linkBootstrap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.18/themes/base/minified/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/css/swiper.min.css" />
+    <link rel="stylesheet" href="/Assets/UIKIT/css/main.min.css" />
+    <link rel="stylesheet" href="/Assets/UIKIT/css/MainStyle-RTL.css" />
+    <link rel="stylesheet" runat="server" id="linkLtr" />
+    <style>
+        :root {
+            --main-color: 0, 114, 255;
+        }
+
+        a:hover, ae:focus {
+            text-decoration: none !important;
+        }
+
+        .required_input label {
+            color: #484848 !important;
+        }
+
+        .radio-input-holder label {
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+
+        .white-holder {
+            border-radius: 0px !important;
+        }
+    </style>
+    <script type="text/javascript">
+        function printOut() {
+            $(".hide").hide();
+            window.print();
+            $(".hide").show();
+        }
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.search);
+            if (results == null)
+                return "";
+            else
+                return decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        function bodyClick() {
+            //alert(getParameterByName("dlgid"));
+            //  parent.activeDialog(getParameterByName("dlgid"));
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="body-subpage" style="height: 1000px; background: #FFF;">
+    <input type="hidden" id="createdHiddenuserId" value="<%= Session["userId"].ToString() %>" />
+    <form id="form1" runat="server" onsubmit="ShowProgress();">
+<%--        <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" EnablePageMethods="true">
+        </asp:ToolkitScriptManager>--%>
+        <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"></asp:ScriptManager>
+        <div id="html2CanvasIframMargin" style="padding-top: 130px; display: none;"></div>
+        <div style="background: #FFF !important;">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <div class="loader-holder" style="display: none;">
+            <img src="/Assets/UIKIT/img/loader.svg" class="loader-img">
+        </div>
+        <asp:ContentPlaceHolder runat="server" ID="outForm"></asp:ContentPlaceHolder>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootbox@5.5.2/bootbox.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/5.4.5/js/swiper.min.js"></script>
+    <script src="/Assets/UIKIT/js/Chart.min.js"></script>
+    <script src="/Assets/UIKIT/js/utils.js"></script>
+    <script src="/Assets/UIKIT/js/main.min.js"></script>
+    <script src="/Assets/UIKIT/fullcalendar/lib/locales-all.min.js"></script>
+    <script src="/JS/jquery-ui-1.8.19.custom.min.js"></script>
+    <script src="/Assets/UIKIT/js/script.js"></script>
+    <script>
+        var lang =<%= (Session["lang"].ToString() == "0") ? "'en'" : "'ar'"%>;
+    </script>
+    <script type="text/javascript">
+        function ShowProgress() {
+            var exportButtons = ["ddlExport", "btnexportexcel"];
+            if (document.activeElement.id.toLowerCase().includes("export") == false) {
+                $(".loader-holder").show();
+                setTimeout(function () {
+                    $(".loader-holder").hide();
+                }, 200);
+            }
+            else {
+                $(".loader-holder").hide();
+            }
+        }
+    </script>
+
+
+</body>
+</html>

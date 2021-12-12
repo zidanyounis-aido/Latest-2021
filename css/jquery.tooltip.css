@@ -1,0 +1,23 @@
+#tooltip {
+	position: absolute;
+	z-index: 999999999999;
+	background-color: #666;
+	color:#FFF;
+	padding: 8px;
+	font-size:12px;
+	text-align:center;
+	font-weight:normal !important;
+	font-family: 'Ubuntu Condensed', sans-serif;
+		
+	-moz-border-radius: 4px;
+-webkit-border-radius: 4px;
+-khtml-border-radius: 4px;
+border-radius: 4px;
+	
+	-webkit-transition: all 0.3s ease-in;  /* Saf3.2+, Chrome */
+     		-moz-transition: all 0.3s ease-in;  /* FF4+ */
+      		-ms-transition: all 0.3s ease-in;  /* IE10? */
+       		-o-transition: all 0.3s ease-in;  /* Opera 10.5+ */
+          	transition: all 0.3s ease-in;
+}
+#tooltip h3, #tooltip div { margin: 0; }

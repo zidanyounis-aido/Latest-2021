@@ -1,0 +1,79 @@
+
+
+.resize-item-holder .ui-resizable-handle.ui-resizable-e {
+    display: block !important;
+}
+
+.resize-item-holder .ui-resizable-handle.ui-resizable-w {
+    display: none !important;
+}
+
+.resize-item-holder {
+    float: left;
+}
+
+.value-settings-section .value-tabs-holder {
+    left: auto;
+    right: 0;
+}
+
+.value-item {
+    margin: 0 15px 20px 0;
+}
+
+.list-tabs-holder ul.tabs li.current {
+    border: 1px solid rgba(var(--main-color), 1);
+    border-left: 1px solid rgba(var(--main-color), 1);
+    border-right: none;
+    border-radius: 10px 0 0 10px;
+}
+
+.value-tabs-holder .tab-content.current {
+    margin-right: 0px;
+    margin-left: -1px;
+    border-radius:0 10px 10px 0;
+}
+
+.add-new-field-row {
+    right: auto;
+    left: 10px;
+}
+
+.btn-view-option {
+    left: auto;
+    right: 0;
+    border-radius: 0 0 0 7px;
+}
+
+.resize-item-holder .item-option {
+    right: 1px;
+    left: auto;
+    border-radius: 7px 0 0 7px;
+}
+
+.resize-item-holder .append-item {
+    left: auto;
+    right: -30px;
+}
+
+.resize-item-holder {
+    margin: 10px 25px 10px 10px;
+}
+
+.resize-item-holder:first-of-type{
+    margin-right: 25px;
+    margin-left: 40px;
+}
+
+.resize-item-holder:last-of-type{
+    margin-left: 10px;
+    margin-right: 40px;
+}
+
+.resize-item-holder {
+    border-radius: 15px 0 0 15px;
+}
+
+.sortable-holder .ui-sortable-placeholder {
+    border-radius: 15px 0 0 15px;
+}

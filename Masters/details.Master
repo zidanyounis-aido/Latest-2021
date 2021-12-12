@@ -1,0 +1,60 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-ui-1.8.19.custom.min.js" type="text/javascript"></script>
+    <link href="../css/ui-lightness/jquery-ui-1.8.19.custom.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body dir='<%= Session["lang"].ToString() == "0" ? "ltr" : "rtl"%> ' >
+    <form id="form1" runat="server">
+    <div>
+<table style="width:100%;" border="0"><tr>
+<td> <asp:Label ID="lblCODEN" runat="server" Text="CODEN"></asp:Label></td>
+<td><asp:TextBox ID="txtCODEN" runat="server"></asp:TextBox></td>
+<td> 
+    <asp:Label ID="lblCODEN1" runat="server" Text="Short Name"></asp:Label>
+            </td>
+<td>
+    <asp:TextBox ID="txtNAME_SHORT" runat="server"></asp:TextBox>
+            </td>
+</tr><tr>
+<td> 
+    <asp:Label ID="lblCODEN0" runat="server" Text="Full Name"></asp:Label>
+                </td>
+<td colspan="3">
+    <asp:TextBox ID="txtFNAME" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtSNAME" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtMNAME" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtLNAME" runat="server"></asp:TextBox>
+                </td>
+</tr><tr>
+<td> 
+    <asp:Label ID="lblCODEN2" runat="server" Text="Full Name"></asp:Label>
+                </td>
+<td colspan="3">
+    <asp:TextBox ID="txtFNAMEL" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtSNAMEL" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtMNAMEL" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtLNAMEL" runat="server"></asp:TextBox>
+                </td>
+</tr><tr>
+<td> <asp:Label ID="lblSTATUS" runat="server" Text="STATUS"></asp:Label></td>
+<td><asp:TextBox ID="txtSTATUS" runat="server"></asp:TextBox></td>
+</tr></table>
+    </div>
+    <hr />
+    <div>
+    
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

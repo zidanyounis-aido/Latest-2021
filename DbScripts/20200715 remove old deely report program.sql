@@ -1,0 +1,1 @@
+delete [dbo].[programs] where programid=26

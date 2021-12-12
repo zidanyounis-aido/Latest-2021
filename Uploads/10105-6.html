@@ -1,0 +1,116 @@
+<table id="tblEditForm">
+            <tr>
+                <td colspan="4"
+                    style="font-size: 18px; color: #003366; background-color: #f6b727; height: 30px; padding-left: 10px;">
+               
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   
+                <td>
+                   
+                </td>
+                <td></td>
+                <td></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                   
+                </td>
+                <td>
+                   
+
+                </td>
+                <td>
+                   
+                </td>
+                <td>
+                   
+
+                </td>
+                <td style="margin-left: 40px">&nbsp;</td>
+                <td style="margin-left: 40px">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                   
+                <td>
+                    
+                </td>
+                <td>
+                    </td>
+                <td style="margin-left: 40px">
+                
+                </td>
+                <td style="margin-left: 40px">&nbsp;</td>
+                <td style="margin-left: 40px">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style2">
+                   
+                </td>
+                <td class="style2">
+                    <asp:DropDownList ID="drpFolderOrder" runat="server">
+                    </asp:DropDownList>
+                </td>
+                <td style="display: none">
+
+                    <asp:CheckBox ID="chkIsDiwan" Text="Is Diwan folder" runat="server" />
+                </td>
+                <td style="margin-left: 40px" class="style2">&nbsp;</td>
+                <td style="margin-left: 40px" class="style2">&nbsp;</td>
+                <td style="margin-left: 40px" class="style2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style2">
+                  
+
+                <td class="style2">
+                   
+                </td>
+                <td class="style2">
+                 </td>
+                <td></td>
+                <td>
+                    </td>
+                <td style="margin-left: 40px" class="style2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                  
+                </td>
+                <td colspan="2">
+                    <div style="display: none">
+                       
+                    </div>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style2">
+              
+                <td class="style2">
+                 
+                </td>
+                <td class="style2"></td>
+                <td></td>
+                <td></td>
+                <td style="margin-left: 40px" class="style2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <asp:LinkButton CssClass="btnSave" ID="btnSave" runat="server" OnClick="btnSave_Click"> <img src="../Images/Icons/action-save-icon.png" align="absmiddle" border="0" /> <%= (Session["lang"].ToString() == "0") ? "Save" : "حفظ"%></asp:LinkButton>
+                </td>
+                <td colspan="2">
+                    <asp:Label ID="lblRes" runat="server" ForeColor="#CC0000"></asp:Label>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
