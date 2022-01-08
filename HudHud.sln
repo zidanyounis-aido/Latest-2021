@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudHud", "HudHud.csproj", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HudhudResources", "..\HudHudResources-main\HudhudResources\HudhudResources.csproj", "{F9090140-D48D-4EBB-8D11-EF15CF8897C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCoreTestResources", "..\HudHudResources-main\DotNetCoreTestResources\DotNetCoreTestResources.csproj", "{2FF57A44-DF04-453D-86CC-DB2163839E5A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetFrameWorkTestResources", "..\HudHudResources-main\DotNetFrameWorkTestResources\DotNetFrameWorkTestResources.csproj", "{7F6C1491-34E2-4EB3-840B-EB98CFC38C9F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{F9090140-D48D-4EBB-8D11-EF15CF8897C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9090140-D48D-4EBB-8D11-EF15CF8897C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9090140-D48D-4EBB-8D11-EF15CF8897C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FF57A44-DF04-453D-86CC-DB2163839E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FF57A44-DF04-453D-86CC-DB2163839E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FF57A44-DF04-453D-86CC-DB2163839E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FF57A44-DF04-453D-86CC-DB2163839E5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F6C1491-34E2-4EB3-840B-EB98CFC38C9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F6C1491-34E2-4EB3-840B-EB98CFC38C9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F6C1491-34E2-4EB3-840B-EB98CFC38C9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F6C1491-34E2-4EB3-840B-EB98CFC38C9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
