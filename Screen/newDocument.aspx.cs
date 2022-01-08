@@ -11,6 +11,7 @@ using System.Data;
 using System.IO;
 using dms.MangeForm;
 using Newtonsoft.Json;
+using IronBarCode;
 
 namespace dms.Screen
 {
@@ -467,6 +468,34 @@ namespace dms.Screen
             }
             pnlAddNew.Visible = false;
             pnlResult.Visible = true;
+            string serial = c.GetDataAsScalar("select top 1 serial from documents where docID=" + int.Parse(txtDocID.Text) + "").ToString();
+            string typeId = c.GetDataAsScalar("select top 1 typeId from documents where docID=" + int.Parse(txtDocID.Text) + "").ToString();
+            // Generate a Simple BarCode image and save as PNG
+            //using IronBarCode;
+            GeneratedBarcode MyBarCode = IronBarCode.BarcodeWriter.CreateBarcode("00000000" + txtDocID.Text, BarcodeWriterEncoding.Code128, 200, 50);
+            string txtBarCode = "العنوان : " + txtDocName.Text + "";
+            txtBarCode += "\r\n";
+            txtBarCode += "التاريخ : " + DateTime.Now.ToString("dd-MM-yyyy") + "   " + "رقم المستند :" + txtDocID.Text;
+            if (typeId != "" && typeId != null)
+            {
+                if (typeId == "1")
+                {
+                    txtBarCode += "\r\n";
+                    txtBarCode += "رقم الصادر : " + serial;
+                }
+                else
+                {
+                    txtBarCode += "\r\n";
+                    txtBarCode += "رقم الوارد : " + serial;
+                }
+            }
+            string filename = "/images/barcode" + DateTime.Now.ToString("ddMMyyyyhhmmssfff") + ".png";
+            MyBarCode.AddAnnotationTextAboveBarcode(txtBarCode);
+            MyBarCode.SaveAsPng(Server.MapPath("~" + filename));
+            c.NonQuery("update documents set Barcode='" + filename + "' where docID=" + int.Parse(txtDocID.Text));
+            //MyBarCode.vo
+            // This line opens the image in your default image viewer
+            //System.Diagnostics.Process.Start(Server.MapPath("~/images/barcode.png"));
         }
         public void callSaveDoc()
         {

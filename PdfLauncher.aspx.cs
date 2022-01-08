@@ -37,18 +37,16 @@ namespace dms
             File.Copy(Tranfiles, ProcessedFiles);
 
             string str = "Temp/" + Helper.GetClientNumber() + "/" + docID.ToString() + "-" + verId.ToString() + ".pdf";
-           // string str = Helper.GetTempDiskPath() + docID.ToString() + "-" + verId.ToString() + ".pdf";
+            // string str = Helper.GetTempDiskPath() + docID.ToString() + "-" + verId.ToString() + ".pdf";
             hdnpath.Value = str;
             //Example 5
-            try
-            {
-                string image = c.GetDataAsScalar("select top 1 Signature from users where userID=" + Session["userID"].ToString()).ToString();
-                //string x = c.GetDataAsScalar("select top 1 Signature from users where userID=" + Session["userID"].ToString()).ToString();
-                hdnsignture.Value = image;
-            }
-            catch { }
+            string image = c.GetDataAsScalar("select top 1 Signature from users where userID=" + int.Parse(Request.QueryString["userID"].ToString())).ToString();
+            string barcode = c.GetDataAsScalar("select top 1 Barcode from documents where docID=" + docID).ToString();
+            //string x = c.GetDataAsScalar("select top 1 Signature from users where userID=" + Session["userID"].ToString()).ToString();
+            hdnsignture.Value = image;
+            hdnDocLable.Value = barcode;
             hdndocument.Value = docID.ToString() + "-" + verId.ToString();
-            hdnuser.Value = Session["userID"].ToString();           
+            hdnuser.Value = Session["userID"].ToString();
         }
     }
 }

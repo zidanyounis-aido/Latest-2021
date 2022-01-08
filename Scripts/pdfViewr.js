@@ -20,7 +20,7 @@ var ht = "";
 var hl = "";
 var thePdf;
 var isCalled = false;
-var scale = 1.0;
+var scale = 1.5;
 var origninW = "";
 var origninH = "";
 var currentPage = 1;
@@ -42,9 +42,92 @@ var lastPage = 0;
 //  'CjAwMDAwMDAwNzkgMDAwMDAgbiAKMDAwMDAwMDE3MyAwMDAwMCBuIAowMDAwMDAwMzAxIDAw' +
 //  'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
 //  'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G');
+var currentContextXValue = 0;
+var currentContextYValue = 0;
 $(function () {
     GetAllSigntures();
+    GetAllBarcods();
     $(function () {
+        //signture context
+        $.contextMenu({
+            selector: '#viewer',
+            position: function (opt, x, y) {
+                currentContextXValue = x;
+                currentContextYValue = y;
+                //alert(x + ',' + y);
+                opt.$menu.css({ top: y, left: x });
+            },
+            callback: function (key, options, e) {
+                debugger;
+                var m = "clicked: " + key;
+                //if (key == "cut") {
+                //    oldFolderPath = [];
+                //    var divpathList = $("#divpathbar a");
+                //    for (var i = 0; i < divpathList.length; i++) {
+                //        oldFolderPath.push($(divpathList[i]).data("id"));
+                //    }
+                //    isExistCopy = true;
+                //    copiedtaskid = 0;
+                //    copiedcontainerid = $(this).data("id");
+                //    toastr.success(elementMsg, '');
+                //    ShowtoggleCopyPaste(1);//show paste btn
+                //}
+                if (key == 'addbarcode') {
+
+                    //left: (rect.left + window.scrollX) - $('#viewer').offset().left,
+                    //    top: (rect.top + window.scrollY) - $('#viewer').offset().top
+                    var top = currentContextYValue;
+                    var left = currentContextXValue;
+                    hl = left;
+                    ht = top;
+                    AddLable();
+                }
+                if (key == "edit") {
+                    origninW = $(this).width();
+                    origninH = $(this).height()
+                    var sigid = $(this).data("id");
+                    var dialog = bootbox.dialog({
+                        title: '',
+                        message: '<div class="form-group"> <label for="">النسبة المئوية</label> <select class="form-control" id="ddelimage" onclick="changeImage();"> <option value="200">200%</option> <option value="100">100%</option> <option value="90">90%</option> <option value="80">80%</option> <option value="70">70%</option> <option value="60">60%</option> <option value="50">50%</option> <option value="40">40%</option> <option value="30">30%</option> <option value="20">20%</option> <option value="10">10%</option> </select> </div><div class="form-group" style="display:none;"> <label for="">العرض</label> <input type="text" class="form-control" id="txtwidth" value="' + $(this).width() + '"> </div> <div class="form-group" style="display:none;"> <label for="">الارتفاع</label> <input type="text" class="form-control" id="txtheight" value="' + $(this).height() + '"> </div>',
+                        buttons: {
+                            cancel: {
+                                label: "cancel",
+                                className: 'btn-danger',
+                                callback: function () {
+                                }
+                            },
+                            ok: {
+                                label: "Save!",
+                                className: 'btn-info',
+                                callback: function () {
+                                    var percntage = Number($("#ddelimage").val());
+                                    $("#txtheight").val(((Number(origninH) * (percntage / 100))))
+                                    $("#txtwidth").val(((Number(origninW) * (percntage / 100))))
+                                    hw = Math.round($("#txtwidth").val());
+                                    hh = Math.round($("#txtheight").val());
+                                    UpdateSize(sigid);
+                                    $(".context-menu[data-id='" + sigid + "']").css('width', hw + 'px');
+                                    $(".context-menu[data-id='" + sigid + "']").css('height', hh + 'px');
+                                }
+                            }
+                        }
+                    });
+                }
+                if (key == "delete") {
+                    var id = $(this).data("id");
+                    DeleteLable(id);
+                }
+            },
+            items: {
+                "addbarcode": { name: "اضافة ليبل", icon: "fa-barcode" },
+                //"addsigne": { name: "اضافة توقيع", icon: "fa-pencil", },
+                "quit": {
+                    name: "خروج", icon: function () {
+                        return 'context-menu-icon context-menu-icon-quit';
+                    }
+                }
+            }
+        });
         $.contextMenu({
             selector: '.context-menu[data-user=' + userId + ']',
             callback: function (key, options, e) {
@@ -107,6 +190,68 @@ $(function () {
                 }
             }
         });
+        $.contextMenu({
+            selector: '.drag-drop',
+            callback: function (key, options, e) {
+                var m = "clicked: " + key;
+                //if (key == "cut") {
+                //    oldFolderPath = [];
+                //    var divpathList = $("#divpathbar a");
+                //    for (var i = 0; i < divpathList.length; i++) {
+                //        oldFolderPath.push($(divpathList[i]).data("id"));
+                //    }
+                //    isExistCopy = true;
+                //    copiedtaskid = 0;
+                //    copiedcontainerid = $(this).data("id");
+                //    toastr.success(elementMsg, '');
+                //    ShowtoggleCopyPaste(1);//show paste btn
+                //}
+                if (key == "edit") {
+                    origninW = $(this).width();
+                    origninH = $(this).height()
+                    var sigid = $(this).data("id");
+                    var dialog = bootbox.dialog({
+                        title: '',
+                        message: '<div class="form-group"> <label for="">النسبة المئوية</label> <select class="form-control" id="ddelimage" onclick="changeImage();"> <option value="200">200%</option> <option value="100">100%</option> <option value="90">90%</option> <option value="80">80%</option> <option value="70">70%</option> <option value="60">60%</option> <option value="50">50%</option> <option value="40">40%</option> <option value="30">30%</option> <option value="20">20%</option> <option value="10">10%</option> </select> </div><div class="form-group" style="display:none;"> <label for="">العرض</label> <input type="text" class="form-control" id="txtwidth" value="' + $(this).width() + '"> </div> <div class="form-group" style="display:none;"> <label for="">الارتفاع</label> <input type="text" class="form-control" id="txtheight" value="' + $(this).height() + '"> </div>',
+                        buttons: {
+                            cancel: {
+                                label: "cancel",
+                                className: 'btn-danger',
+                                callback: function () {
+                                }
+                            },
+                            ok: {
+                                label: "Save!",
+                                className: 'btn-info',
+                                callback: function () {
+                                    var percntage = Number($("#ddelimage").val());
+                                    $("#txtheight").val(((Number(origninH) * (percntage / 100))))
+                                    $("#txtwidth").val(((Number(origninW) * (percntage / 100))))
+                                    hw = Math.round($("#txtwidth").val());
+                                    hh = Math.round($("#txtheight").val());
+                                    UpdateSizeBarcode(sigid);
+                                    $(".drag-drop[data-id='" + sigid + "']").css('width', hw + 'px');
+                                    $(".drag-drop[data-id='" + sigid + "']").css('height', hh + 'px');
+                                }
+                            }
+                        }
+                    });
+                }
+                if (key == "delete") {
+                    var sigid = $(this).data("id");
+                    DeleteBarcode(sigid);
+                }
+            },
+            items: {
+                "edit": { name: "تغير الحجم", icon: "fa-picture-o" },
+                "delete": { name: "حذف", icon: "fa-trash-o", },
+                "quit": {
+                    name: "خروج", icon: function () {
+                        return 'context-menu-icon context-menu-icon-quit';
+                    }
+                }
+            }
+        });
         $('.context-menu').on('click', function (e) {
             //console.log('clicked', this);
         })
@@ -144,6 +289,11 @@ loadingTask.promise.then(function (pdf) {
         // createWM(canvas);
         renderPage(page, canvas);
     }
+    setTimeout(function () {
+        //alert("load file ended");
+        // allow drag for all items
+        allowDrag();
+    }, 1500);
     setTimeout(function () {
         for (page = 1; page <= totalPages; page++) {
             //var pagename = 'page' + page;
@@ -226,6 +376,7 @@ function renderPage(pageNumber, canvas) {
         //call signture
         $(".context-menu").show();
         myApp.hidePreloader();
+        //alert("pdf loaded end");
     });
 
 }
@@ -481,7 +632,38 @@ function GetAllSigntures() {
         }
     });
 }
-
+function GetAllBarcods() {
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/GetAllBarcods",
+        data: "{document:'" + documentId + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            var html = "";
+            for (var i = 0; i < jsdata.length; i++) {
+                //save latest height
+                if (jsdata[i].UserId == userId) {
+                    if (jsdata[i].Width != undefined && jsdata[i].Width != '' && jsdata[i].Width != null) {
+                        hw = jsdata[i].Width;
+                        hh = jsdata[i].Height;
+                    }
+                }
+                debugger;
+                if (jsdata[i].Transform == "")
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
+                else
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '" >';
+                //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
+            }
+            $("#viewer").prepend(html);
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
 function AddSignture() {
     $.ajax({
         type: "POST",
@@ -497,6 +679,52 @@ function AddSignture() {
             }
             else {
                 alert("ليس مسجل لديك توقيع");
+            }
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
+function UpdateLablePosition(id) {
+    id = Number(id);
+    var elmName = 'drag-' + id;
+    var el = document.getElementById(elmName);
+    var topValue = getOffset(el).top;
+    var leftValue = getOffset(el).left;
+    var transformValue = 'transform: translate(' + $('#' + elmName + '').css('transform').split(',')[4] + 'px,' + $('#' + elmName + '').css('transform').split(',')[5].replace(')', '') + 'px);';
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/UpdateLablePosition",
+        data: "{top:'" + topValue + "',left:'" + leftValue + "',transform:'" + transformValue + "',id:" + id + "}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            console.log('update position top =>' + topValue + ",left =>" + leftValue);
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
+function AddLable() {
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/AddLable",
+        data: "{width:'" + hw + "',height:'" + hh + "',top:'" + ht + "',left:'" + hl + "',document:'" + documentId + "',user:'" + userId + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            if (jsdata != false) {
+                var barcode = $('#hdnDocLable').val();
+                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute; left: ' + hl + 'px; top: ' + ht + 'px"  src="' + barcode + '" >');
+                //$("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + lable + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
+                //$(".context-menu").show();
+            }
+            else {
+                alert("لا يوجد ليبل لهذا الملف");
             }
         },
         error: function (result) {
@@ -525,6 +753,27 @@ function UpdateSize(id) {
         }
     });
 }
+function UpdateSizeBarcode(id) {
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/UpdateSizeBarcode",
+        data: "{width:'" + hw + "',height:'" + hh + "',id:'" + id + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            if (jsdata != false) {
+
+            }
+            else {
+                //alert("ليس مسجل لديك توقيع");
+            }
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
 function DeleteSigntures(id) {
     $.ajax({
         type: "POST",
@@ -536,6 +785,27 @@ function DeleteSigntures(id) {
             var jsdata = JSON.parse(data.d);
             if (jsdata != false) {
                 $(".context-menu[data-id='" + id + "']").remove();
+            }
+            else {
+                alert("خطا ف الحذف");
+            }
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
+function DeleteBarcode(id) {
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/DeleteBarcode",
+        data: "{id:'" + id + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            if (jsdata != false) {
+                $(".drag-drop[data-id='" + id + "']").remove();
             }
             else {
                 alert("خطا ف الحذف");
@@ -651,4 +921,105 @@ function goBack() {
             }
         }
     }
+}
+
+function allowDrag() {
+
+    /* The dragging code for '.draggable' from the demo above
+       * applies to this demo as well so it doesn't have to be repeated. */
+    // enable draggables to be dropped into this
+    interact('.dropzone').dropzone({
+        // only accept elements matching this CSS selector
+        accept: '.drag-drop',
+        // Require a 100% element overlap for a drop to be possible
+        overlap: 1,
+
+        // listen for drop related events:
+
+        ondropactivate: function (event) {
+            // add active dropzone feedback
+            event.target.classList.add('drop-active');
+        },
+        ondragenter: function (event) {
+            var draggableElement = event.relatedTarget,
+                dropzoneElement = event.target;
+
+            // feedback the possibility of a drop
+            dropzoneElement.classList.add('drop-target');
+            draggableElement.classList.add('can-drop');
+            draggableElement.classList.remove('dropped-out');
+            //draggableElement.textContent = 'Dragged in';
+        },
+        ondragleave: function (event) {
+            // remove the drop feedback style
+            event.target.classList.remove('drop-target');
+            event.relatedTarget.classList.remove('can-drop');
+            event.relatedTarget.classList.add('dropped-out');
+            //event.relatedTarget.textContent = 'Dragged out';
+        },
+        ondrop: function (event) {
+            //event.relatedTarget.textContent = 'Dropped';
+        },
+        ondropdeactivate: function (event) {
+            // remove active dropzone feedback
+            event.target.classList.remove('drop-active');
+            event.target.classList.remove('drop-target');
+        }
+    });
+
+    interact('.drag-drop')
+        .draggable({
+            inertia: true,
+            restrict: {
+                restriction: "#selectorContainer",
+                endOnly: true,
+                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+            },
+            autoScroll: true,
+            // dragMoveListener from the dragging demo above
+            onmove: dragMoveListener,
+            onend: dragEndListener
+        });
+
+
+    function dragMoveListener(event) {
+        //debugger;
+        var target = event.target,
+            // keep the dragged position in the data-x/data-y attributes
+            x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+            y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+        console.log('x s => ' + x + ",y is =>" + y);
+        // translate the element
+        target.style.webkitTransform =
+            target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+        // update the posiion attributes
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+        //var id = $(target).attr("data-id");
+        //UpdateLablePosition(id);
+    }
+
+    function dragEndListener(event) {
+        //debugger;
+        try {
+            var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+            var id = $(target).attr("data-id");
+            UpdateLablePosition(id);
+        } catch (e) {
+
+        }
+    }
+    // this is used later in the resizing demo
+    window.dragMoveListener = dragMoveListener;
+}
+function getOffset(el) {
+    const rect = el.getBoundingClientRect();
+    return {
+        left: (rect.left + window.scrollX) - $('#viewer').offset().left,
+        top: (rect.top + window.scrollY) - $('#viewer').offset().top
+    };
 }

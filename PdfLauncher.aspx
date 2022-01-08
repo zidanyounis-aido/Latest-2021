@@ -46,6 +46,17 @@ See https://github.com/adobe-type-tools/cmap-resources
     </style>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
+        canvas {
+            z-index: -2 !important;
+        }
+
+        .drag-drop {
+            z-index: 1 !important;
+            position: absolute !important;
+            border: 0.3px solid;
+            padding-bottom: 5px;
+        }
+
         /*.navbar-fixed-left {
             width: 96px;
             position: fixed;
@@ -70,6 +81,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             @page {
                 margin: 0;
             }
+
             body {
                 margin-left: -2.6cm;
                 margin-right: -2.6cm;
@@ -81,10 +93,11 @@ See https://github.com/adobe-type-tools/cmap-resources
 <body tabindex="1" class="loadingInProgress" style="background: #404040 !important; background-image: url(images/texture.png);">
     <input type="hidden" id="hdnpath" runat="server" />
     <input type="hidden" id="hdnsignture" runat="server" />
+    <input type="hidden" id="hdnDocLable" runat="server" />
     <input type="hidden" id="hdndocument" runat="server" />
     <input type="hidden" id="hdnuser" runat="server" />
     <div id="outerContainer">
-        <div id="sidebarContainer" style="position:fixed;">
+        <div id="sidebarContainer" style="position: fixed;">
             <div id="toolbarSidebar">
                 <div class="splitToolbarButton toggled">
                     <button id="viewThumbnail" class="toolbarButton" title="Show Thumbnails" tabindex="2" data-l10n-id="thumbs">
@@ -99,7 +112,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                 </div>
             </div>
             <div id="sidebarContent">
-                <div id="thumbnailView" style="overflow:hidden !important;">
+                <div id="thumbnailView" style="overflow: hidden !important;">
                 </div>
                 <div id="outlineView" class="hidden">
                 </div>
@@ -113,7 +126,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         <div id="mainContainer">
             <!-- secondaryToolbar -->
 
-            <div class="toolbar" style="position:fixed;">
+            <div class="toolbar" style="position: fixed;">
                 <div id="toolbarContainer">
                     <div id="toolbarViewer">
                         <div id="toolbarViewerLeft">
@@ -133,8 +146,8 @@ See https://github.com/adobe-type-tools/cmap-resources
                                     <span data-l10n-id="next_label">التالية</span>
                                 </button>
                             </div>
-                            <input type="number" id="pageNumber" class="toolbarField pageNumber" title="صفحة" value="1" >
-                            <span id="numPages" class="toolbarLabel"> 0</span>
+                            <input type="number" id="pageNumber" class="toolbarField pageNumber" title="صفحة" value="1">
+                            <span id="numPages" class="toolbarLabel">0</span>
                         </div>
                         <div id="toolbarViewerRight">
                             <%--  <button id="presentationMode" class="toolbarButton presentationMode hiddenLargeView" title="انتقل لوضع العرض التقديمي" tabindex="31" data-l10n-id="presentation_mode">
@@ -206,8 +219,10 @@ See https://github.com/adobe-type-tools/cmap-resources
             <div class="container">
                 <div class="row" style="margin-top: 50px;">
                     <div class="col-md-12">
-                        <div id="viewerContainer" tabindex="0" style="text-align: center !important; margin: auto !important;margin-top:5%;">
-                            <div id="viewer" class="pdfViewer"></div>
+                        <div id="viewerContainer" tabindex="0" style="text-align: center !important; margin: auto !important; margin-top: 5%;">
+
+                            <div id="viewer" class="pdfViewer singlePageView dropzone nopadding">
+                            </div>
                         </div>
                     </div>
                     <%--                <div class="col-md-1">
@@ -240,15 +255,16 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
         </div>
     </div>
-    <input type="hidden"  id="hdnCurrentName" runat="server" />
+    <input type="hidden" id="hdnCurrentName" runat="server" />
     <!-- outerContainer -->
     <div id="printContainer"></div>
     <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.0.2/interact.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <%--<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>--%>
     <script src="Scripts/pdfJS/pdf.js"></script>
-   <%-- <script src="JS/build/pdf.js"></script>--%>
+    <%-- <script src="JS/build/pdf.js"></script>--%>
     <script src="https://kendo.cdn.telerik.com/2017.2.621/js/jquery.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2017.2.621/js/jszip.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
@@ -259,8 +275,10 @@ See https://github.com/adobe-type-tools/cmap-resources
     <script src="Scripts/pdfViewr.js"></script>
     <script src="viewer.js"></script>
     <script src="JS/bootstrap.min.js"></script>
+
+
     <%--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>--%>
-   <%-- <script type="text/javascript">
+    <%-- <script type="text/javascript">
         var currentUserName = Session["userName"].ToString();
     </script>--%>
 </body>

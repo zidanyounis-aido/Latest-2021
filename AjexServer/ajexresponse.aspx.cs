@@ -282,14 +282,14 @@ namespace dms.AjexServer
             try
             {
                 CommonFunction.clsCommon c = new CommonFunction.clsCommon();
-                string query = "update [dbo].[event] set [event_start]=CAST('" + start + "' AS datetime) , [event_end]=CAST('" + end + "' AS datetime)  where [event_id]=" + id;
+                string query = "update [dbo].[event] set [event_start]=CAST('" + start + "' AS DATE) , [event_end]=CAST('" + end + "' AS DATE)  where [event_id]=" + id;
                 c.NonQuery(query);
                 return serializer.Serialize("true");
             }
             catch (Exception ex)
             {
-                return serializer.Serialize(ex.ToString());
-                //return serializer.Serialize("false");
+
+                return serializer.Serialize("false");
             }
         }
         public static string ConvertToEasternArabicNumerals(string input)
@@ -347,6 +347,82 @@ namespace dms.AjexServer
         }
 
         [WebMethod]
+        public static string AddLable(string width, string height, string top, string left, int user, string document)
+        {
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                //Example 5
+                string lable = c.GetDataAsScalar("select top 1 Barcode from documents where docID=" + document.Split('-')[0]).ToString();
+                if (lable != null && lable != "")
+                {
+                    //int id = c.NonQuery("insert into SignatureTB values('" + signture + "','" + document + "'," + user + ",'" + width + "','" + height + "','" + top + "','" + left + "')");
+                    Hashtable parameters = new Hashtable();
+                    parameters.Add("@lable", lable);
+                    parameters.Add("@user", user);
+                    parameters.Add("@width", width);
+                    parameters.Add("@height", height);
+                    parameters.Add("@top", top);
+                    parameters.Add("@left", left);
+                    parameters.Add("@document", document);
+                    c.NonQueryFromSP("AddDocumentLable", parameters);
+
+                    int maxid = int.Parse(c.GetDataAsScalar("select top 1 max(Id) from DocumentLablesTB where UserId=" + user).ToString());
+                    return serializer.Serialize(maxid);
+                }
+                else
+                {
+                    return serializer.Serialize("false");
+                }
+            }
+            catch (Exception ex)
+            {
+                return serializer.Serialize("false");
+            }
+        }
+
+
+        [WebMethod]
+        public static string UpdateLablePosition(string top, string left, string transform, int id)
+        {
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                string q = "update DocumentLablesTB set  [top]=" + top + ",[Left]=" + left + ",[Transform]='" + transform + "' where id=" + id + "";
+                c.NonQuery(q);
+                return serializer.Serialize("true");
+                //Example 5
+                //string lable = c.GetDataAsScalar("select top 1 Barcode from documents where docID=" + document.Split('-')[0]).ToString();
+                //if (lable != null && lable != "")
+                //{
+                //    //int id = c.NonQuery("insert into SignatureTB values('" + signture + "','" + document + "'," + user + ",'" + width + "','" + height + "','" + top + "','" + left + "')");
+                //    Hashtable parameters = new Hashtable();
+                //    parameters.Add("@lable", lable);
+                //    parameters.Add("@user", user);
+                //    parameters.Add("@width", width);
+                //    parameters.Add("@height", height);
+                //    parameters.Add("@top", top);
+                //    parameters.Add("@left", left);
+                //    parameters.Add("@document", document);
+                //    c.NonQueryFromSP("AddDocumentLable", parameters);
+
+                //    int maxid = int.Parse(c.GetDataAsScalar("select top 1 max(Id) from DocumentLablesTB where UserId=" + user).ToString());
+                //    return serializer.Serialize(maxid);
+                //}
+                //else
+                //{
+                //    return serializer.Serialize("false");
+                //}
+            }
+            catch (Exception ex)
+            {
+                return serializer.Serialize("false");
+            }
+        }
+
+        [WebMethod]
         public static string GetAllSigntures(string document)
         {
             List<SignatureTB> list = new List<SignatureTB>();
@@ -379,6 +455,40 @@ namespace dms.AjexServer
             }
         }
 
+
+        [WebMethod]
+        public static string GetAllBarcods(string document)
+        {
+            List<SignatureTB> list = new List<SignatureTB>();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                string query = "SELECT  Id, Lable, Documnet, UserId, Width, Height, [Top], [Left],Transform FROM dbo.DocumentLablesTB where Documnet='" + document.ToString() + "'";
+                DataTable dt = c.GetDataAsDataTable(query);
+                foreach (var item in dt.AsEnumerable())
+                {
+                    SignatureTB obj = new SignatureTB();
+                    obj.Id = item.Field<int>("Id");
+                    obj.Documnet = item.Field<string>("Documnet");
+                    obj.Transform = item.Field<string>("Transform");
+                    obj.Width = item.Field<string>("Width");
+                    obj.Height = item.Field<string>("Height");
+                    obj.Top = item.Field<string>("Top");
+                    obj.Left = item.Field<string>("Left");
+                    obj.Lable = item.Field<string>("Lable");
+                    obj.UserId = item.Field<int>("UserId");
+                    list.Add(obj);
+                }
+                JavaScriptSerializer jscript = new JavaScriptSerializer();
+                return jscript.Serialize(list);
+            }
+            catch (Exception ex)
+            {
+
+                JavaScriptSerializer jscript = new JavaScriptSerializer();
+                return jscript.Serialize(list);
+            }
+        }
         [WebMethod]
         public static string GetAllSearch(string str)
         {
@@ -412,7 +522,7 @@ namespace dms.AjexServer
                 catch (Exception)
                 {
 
-                   // throw;
+                    // throw;
                 }
                 generalSearhLists.TasksList = new List<EventIns>();
                 //search tasks
@@ -439,7 +549,7 @@ namespace dms.AjexServer
                 catch (Exception)
                 {
 
-                   // throw;
+                    // throw;
                 }
                 generalSearhLists.DocumentsList = new List<EventIns>();
                 //search events
@@ -478,7 +588,7 @@ namespace dms.AjexServer
             parameters.Add("@SearchText", str);
             return c.GetDataAsDataTableFromSP("EventsSearch", parameters);
         }
-        protected  static DataTable LoadTasks(string str)
+        protected static DataTable LoadTasks(string str)
         {
             CommonFunction.clsCommon c = new CommonFunction.clsCommon();
             Hashtable parameters = new Hashtable();
@@ -628,7 +738,6 @@ namespace dms.AjexServer
                 int id = int.Parse(HttpContext.Current.Session["userID"].ToString());
                 CommonFunction.clsCommon c = new CommonFunction.clsCommon();
                 //"and CONVERT(date,TaskDate)=" +DateTime.Now.ToString("yyyy-MM-dd")
-                //Get Tasks
                 string datet = DateTime.Now.ToString("yyyy-MM-dd");
                 string query = "select [Id],[TaskName],[TaskDate] from [dbo].[ToDoList] where CAST(TaskDate as date)='" + datet + "' and  [AssignTo]=" + id;
                 DataTable dt = c.GetDataAsDataTable(query);
@@ -643,37 +752,16 @@ namespace dms.AjexServer
                         eventIns1.Id = item.Field<int>("Id");
                         eventIns1.Name = item.Field<string>("TaskName");
                         eventIns1.Start = item.Field<DateTime>("TaskDate").ToString("yyyy-MM-dd'T'HH:mm");
-                        eventIns1.End = item.Field<DateTime>("TaskDate").AddHours(1).ToString("yyyy-MM-dd'T'HH:mm");
                         eventIns.Add(eventIns1);
                     }
-                    //JavaScriptSerializer jscript = new JavaScriptSerializer();
-                    //return jscript.Serialize(eventIns);
+                    JavaScriptSerializer jscript = new JavaScriptSerializer();
+                    return jscript.Serialize(eventIns);
                 }
-                //Get Events
-                string eventsquery = "select [event_id],[title],[event_start],[event_end] from [dbo].[event] where CAST(event_start as date)='" + datet + "'";
-                DataTable dtevent = c.GetDataAsDataTable(eventsquery);
-                if (dtevent.Rows.Count > 0)
+                else
                 {
-                    foreach (var item in dtevent.AsEnumerable())
-                    {
-                        EventIns eventIns1 = new EventIns();
-                        //UsersList obj = new UsersList();
-                        //obj.Name = item.Field<string>("userName");
-                        //list.Add(obj);
-                        eventIns1.Id = item.Field<int>("event_id");
-                        eventIns1.Name = item.Field<string>("title");
-                        eventIns1.Start = item.Field<DateTime>("event_start").ToString("yyyy-MM-dd'T'HH:mm");
-                        eventIns1.End = item.Field<DateTime>("event_end").ToString("yyyy-MM-dd'T'HH:mm");
-                        eventIns.Add(eventIns1);
-                    }
-                    //JavaScriptSerializer jscript = new JavaScriptSerializer();
-                    //return jscript.Serialize(eventIns);
+                    JavaScriptSerializer jscript = new JavaScriptSerializer();
+                    return jscript.Serialize(eventIns);
                 }
-              
-
-                JavaScriptSerializer jscript = new JavaScriptSerializer();
-                return jscript.Serialize(eventIns);
-                
 
             }
             catch (Exception ex)
@@ -997,6 +1085,29 @@ namespace dms.AjexServer
             }
         }
         [WebMethod]
+        public static string DeleteBarcode(int id)
+        {
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                //Example 5
+                if (id != 0)
+                {
+                    int x = c.NonQuery("Delete  DocumentLablesTB where Id=" + id);
+                    return serializer.Serialize("true");
+                }
+                else
+                {
+                    return serializer.Serialize("false");
+                }
+            }
+            catch (Exception ex)
+            {
+                return serializer.Serialize("false");
+            }
+        }
+        [WebMethod]
         public static string DeleteFileVersion(int id, int version)
         {
             var serializer = new JavaScriptSerializer();
@@ -1107,6 +1218,30 @@ namespace dms.AjexServer
                 if (id != 0)
                 {
                     int x = c.NonQuery("Update  SignatureTB Set Width=" + width + ",Height=" + height + " where Id=" + id);
+                    return serializer.Serialize("true");
+                }
+                else
+                {
+                    return serializer.Serialize("false");
+                }
+            }
+            catch (Exception ex)
+            {
+                return serializer.Serialize("false");
+            }
+        }
+
+        [WebMethod]
+        public static string UpdateSizeBarcode(int width, int height, int id)
+        {
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                //Example 5
+                if (id != 0)
+                {
+                    int x = c.NonQuery("Update  DocumentLablesTB Set Width=" + width + ",Height=" + height + " where Id=" + id);
                     return serializer.Serialize("true");
                 }
                 else
@@ -1307,6 +1442,8 @@ namespace dms.AjexServer
         {
             public int Id { get; set; }
             public string Signture { get; set; }
+            public string Lable { get; set; }
+            public string Transform { get; set; }
 
             public string Documnet { get; set; }
             public int UserId { get; set; }
@@ -1353,7 +1490,6 @@ namespace dms.AjexServer
         public string Name { get; set; }
         public string Color { get; set; }
         public string Start { get; set; }
-        public string End { get; set; }
         public int Type { get; set; }
     }
     public class GeneralSearchLists
