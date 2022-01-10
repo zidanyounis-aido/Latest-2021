@@ -775,46 +775,56 @@ function UpdateSizeBarcode(id) {
     });
 }
 function DeleteSigntures(id) {
-    $.ajax({
-        type: "POST",
-        url: "/AjexServer/ajexresponse.aspx/DeleteSigntures",
-        data: "{id:'" + id + "'}",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (data) {
-            var jsdata = JSON.parse(data.d);
-            if (jsdata != false) {
-                $(".context-menu[data-id='" + id + "']").remove();
-            }
-            else {
-                alert("خطا ف الحذف");
-            }
-        },
-        error: function (result) {
-            // alert("Error");
+    bootbox.confirm("تأكيد الحذف ؟", function (result) {
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/AjexServer/ajexresponse.aspx/DeleteSigntures",
+                data: "{id:'" + id + "'}",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var jsdata = JSON.parse(data.d);
+                    if (jsdata != false) {
+                        $(".context-menu[data-id='" + id + "']").remove();
+                    }
+                    else {
+                        alert("خطا ف الحذف");
+                    }
+                },
+                error: function (result) {
+                    // alert("Error");
+                }
+            });
         }
     });
+
 }
 function DeleteBarcode(id) {
-    $.ajax({
-        type: "POST",
-        url: "/AjexServer/ajexresponse.aspx/DeleteBarcode",
-        data: "{id:'" + id + "'}",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (data) {
-            var jsdata = JSON.parse(data.d);
-            if (jsdata != false) {
-                $(".drag-drop[data-id='" + id + "']").remove();
-            }
-            else {
-                alert("خطا ف الحذف");
-            }
-        },
-        error: function (result) {
-            // alert("Error");
+    bootbox.confirm("تأكيد الحذف ؟", function (result) {
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/AjexServer/ajexresponse.aspx/DeleteBarcode",
+                data: "{id:'" + id + "'}",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var jsdata = JSON.parse(data.d);
+                    if (jsdata != false) {
+                        $(".drag-drop[data-id='" + id + "']").remove();
+                    }
+                    else {
+                        alert("خطا ف الحذف");
+                    }
+                },
+                error: function (result) {
+                    // alert("Error");
+                }
+            });
         }
     });
+    
 }
 $(document).ajaxSend(function () {
     myApp.showPreloader();
