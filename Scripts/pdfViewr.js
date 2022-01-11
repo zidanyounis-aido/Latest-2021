@@ -1,4 +1,6 @@
-﻿var myApp = new AWSF({
+﻿
+
+var myApp = new AWSF({
     spinner: true,
     postBackPreloader: true,
     pTrigger: false,
@@ -58,7 +60,7 @@ $(function () {
                 opt.$menu.css({ top: y, left: x });
             },
             callback: function (key, options, e) {
-                debugger;
+                
                 var m = "clicked: " + key;
                 //if (key == "cut") {
                 //    oldFolderPath = [];
@@ -82,36 +84,13 @@ $(function () {
                     ht = top;
                     AddLable();
                 }
-                if (key == "edit") {
-                    origninW = $(this).width();
-                    origninH = $(this).height()
-                    var sigid = $(this).data("id");
-                    var dialog = bootbox.dialog({
-                        title: '',
-                        message: '<div class="form-group"> <label for="">النسبة المئوية</label> <select class="form-control" id="ddelimage" onclick="changeImage();"> <option value="200">200%</option> <option value="100">100%</option> <option value="90">90%</option> <option value="80">80%</option> <option value="70">70%</option> <option value="60">60%</option> <option value="50">50%</option> <option value="40">40%</option> <option value="30">30%</option> <option value="20">20%</option> <option value="10">10%</option> </select> </div><div class="form-group" style="display:none;"> <label for="">العرض</label> <input type="text" class="form-control" id="txtwidth" value="' + $(this).width() + '"> </div> <div class="form-group" style="display:none;"> <label for="">الارتفاع</label> <input type="text" class="form-control" id="txtheight" value="' + $(this).height() + '"> </div>',
-                        buttons: {
-                            cancel: {
-                                label: "cancel",
-                                className: 'btn-danger',
-                                callback: function () {
-                                }
-                            },
-                            ok: {
-                                label: "Save!",
-                                className: 'btn-info',
-                                callback: function () {
-                                    var percntage = Number($("#ddelimage").val());
-                                    $("#txtheight").val(((Number(origninH) * (percntage / 100))))
-                                    $("#txtwidth").val(((Number(origninW) * (percntage / 100))))
-                                    hw = Math.round($("#txtwidth").val());
-                                    hh = Math.round($("#txtheight").val());
-                                    UpdateSize(sigid);
-                                    $(".context-menu[data-id='" + sigid + "']").css('width', hw + 'px');
-                                    $(".context-menu[data-id='" + sigid + "']").css('height', hh + 'px');
-                                }
-                            }
-                        }
-                    });
+                if (key == "addsigne") {
+                    var top = $('#viewer').scrollTop() + currentContextYValue - $('#viewer').offset().top;
+                    var left = currentContextXValue - $('#viewer').offset().left;
+                    hl = left;
+                    ht = top;
+                    AddSignture();
+                   // $('#viewer').dblclick();
                 }
                 if (key == "delete") {
                     var id = $(this).data("id");
@@ -120,7 +99,7 @@ $(function () {
             },
             items: {
                 "addbarcode": { name: "اضافة ليبل", icon: "fa-barcode" },
-                //"addsigne": { name: "اضافة توقيع", icon: "fa-pencil", },
+                "addsigne": { name: "اضافة توقيع", icon: "fa-pencil", },
                 "quit": {
                     name: "خروج", icon: function () {
                         return 'context-menu-icon context-menu-icon-quit';
@@ -650,11 +629,11 @@ function GetAllBarcods() {
                         hh = jsdata[i].Height;
                     }
                 }
-                debugger;
+                
                 if (jsdata[i].Transform == "")
                     html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
                 else
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '" >';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '" >';
                 //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
             }
             $("#viewer").prepend(html);
@@ -687,6 +666,7 @@ function AddSignture() {
     });
 }
 function UpdateLablePosition(id) {
+    
     id = Number(id);
     var elmName = 'drag-' + id;
     var el = document.getElementById(elmName);
@@ -824,7 +804,7 @@ function DeleteBarcode(id) {
             });
         }
     });
-    
+
 }
 $(document).ajaxSend(function () {
     myApp.showPreloader();
@@ -993,7 +973,7 @@ function allowDrag() {
 
 
     function dragMoveListener(event) {
-        //debugger;
+        //
         var target = event.target,
             // keep the dragged position in the data-x/data-y attributes
             x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -1011,7 +991,7 @@ function allowDrag() {
     }
 
     function dragEndListener(event) {
-        //debugger;
+        //
         try {
             var target = event.target,
                 // keep the dragged position in the data-x/data-y attributes
@@ -1029,7 +1009,7 @@ function allowDrag() {
 function getOffset(el) {
     const rect = el.getBoundingClientRect();
     return {
-        left: (rect.left + window.scrollX) - $('#viewer').offset().left,
-        top: (rect.top + window.scrollY) - $('#viewer').offset().top
+        left: (rect.left + window.scrollX),
+        top: (rect.top + window.scrollY)
     };
 }
