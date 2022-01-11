@@ -60,7 +60,7 @@ $(function () {
                 opt.$menu.css({ top: y, left: x });
             },
             callback: function (key, options, e) {
-                
+
                 var m = "clicked: " + key;
                 //if (key == "cut") {
                 //    oldFolderPath = [];
@@ -90,7 +90,7 @@ $(function () {
                     hl = left;
                     ht = top;
                     AddSignture();
-                   // $('#viewer').dblclick();
+                    // $('#viewer').dblclick();
                 }
                 if (key == "delete") {
                     var id = $(this).data("id");
@@ -622,6 +622,7 @@ function GetAllBarcods() {
             var jsdata = JSON.parse(data.d);
             var html = "";
             for (var i = 0; i < jsdata.length; i++) {
+                var elmName = 'drag-' + jsdata[i].Id;
                 //save latest height
                 if (jsdata[i].UserId == userId) {
                     if (jsdata[i].Width != undefined && jsdata[i].Width != '' && jsdata[i].Width != null) {
@@ -629,11 +630,15 @@ function GetAllBarcods() {
                         hh = jsdata[i].Height;
                     }
                 }
-                
+
                 if (jsdata[i].Transform == "")
                     html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
-                else
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '" >';
+                else {
+                    debugger;
+                    var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
+                    var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP+ '" data-y="' + YP + '">';
+                }
                 //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
             }
             $("#viewer").prepend(html);
@@ -666,7 +671,7 @@ function AddSignture() {
     });
 }
 function UpdateLablePosition(id) {
-    
+
     id = Number(id);
     var elmName = 'drag-' + id;
     var el = document.getElementById(elmName);
@@ -699,7 +704,7 @@ function AddLable() {
             var jsdata = JSON.parse(data.d);
             if (jsdata != false) {
                 var barcode = $('#hdnDocLable').val();
-                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute; left: ' + hl + 'px; top: ' + ht + 'px"  src="' + barcode + '" >');
+                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
                 //$("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + lable + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
                 //$(".context-menu").show();
             }
@@ -962,10 +967,10 @@ function allowDrag() {
             inertia: true,
             restrict: {
                 restriction: "#selectorContainer",
-                endOnly: true,
-                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+                //endOnly: true,
+                // elementRect: { top: 500, left: 100 }
             },
-            autoScroll: true,
+            //autoScroll: true,
             // dragMoveListener from the dragging demo above
             onmove: dragMoveListener,
             onend: dragEndListener
