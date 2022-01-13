@@ -27,6 +27,7 @@ var origninW = "";
 var origninH = "";
 var currentPage = 1;
 var lastPage = 0;
+var targetElm = "";
 // atob() is used to convert base64 encoded PDF to binary-like data.
 // (See also https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/
 // Base64_encoding_and_decoding.)
@@ -46,6 +47,7 @@ var lastPage = 0;
 //  'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G');
 var currentContextXValue = 0;
 var currentContextYValue = 0;
+var percntage = 0;
 $(function () {
     GetAllSigntures();
     GetAllBarcods();
@@ -131,6 +133,7 @@ $(function () {
                     origninW = $(this).width();
                     origninH = $(this).height()
                     var sigid = $(this).data("id");
+
                     var dialog = bootbox.dialog({
                         title: '',
                         message: '<div class="form-group"> <label for="">النسبة المئوية</label> <select class="form-control" id="ddelimage" onclick="changeImage();"> <option value="200">200%</option> <option value="100">100%</option> <option value="90">90%</option> <option value="80">80%</option> <option value="70">70%</option> <option value="60">60%</option> <option value="50">50%</option> <option value="40">40%</option> <option value="30">30%</option> <option value="20">20%</option> <option value="10">10%</option> </select> </div><div class="form-group" style="display:none;"> <label for="">العرض</label> <input type="text" class="form-control" id="txtwidth" value="' + $(this).width() + '"> </div> <div class="form-group" style="display:none;"> <label for="">الارتفاع</label> <input type="text" class="form-control" id="txtheight" value="' + $(this).height() + '"> </div>',
@@ -189,45 +192,94 @@ $(function () {
                 //    toastr.success(elementMsg, '');
                 //    ShowtoggleCopyPaste(1);//show paste btn
                 //}
+
                 if (key == "edit") {
+
                     origninW = $(this).width();
-                    origninH = $(this).height()
+                    origninH = $(this).height();
                     var sigid = $(this).data("id");
                     var dialog = bootbox.dialog({
                         title: '',
                         message: '<div class="form-group"> <label for="">النسبة المئوية</label> <select class="form-control" id="ddelimage" onclick="changeImage();"> <option value="200">200%</option> <option value="100">100%</option> <option value="90">90%</option> <option value="80">80%</option> <option value="70">70%</option> <option value="60">60%</option> <option value="50">50%</option> <option value="40">40%</option> <option value="30">30%</option> <option value="20">20%</option> <option value="10">10%</option> </select> </div><div class="form-group" style="display:none;"> <label for="">العرض</label> <input type="text" class="form-control" id="txtwidth" value="' + $(this).width() + '"> </div> <div class="form-group" style="display:none;"> <label for="">الارتفاع</label> <input type="text" class="form-control" id="txtheight" value="' + $(this).height() + '"> </div>',
                         buttons: {
                             cancel: {
-                                label: "cancel",
+                                label: "الغاء",
                                 className: 'btn-danger',
                                 callback: function () {
                                 }
                             },
+                            noclose: {
+                                label: "تحديد صفحات",
+                                className: 'btn-warning',
+                                callback: function () {
+                                    percntage = Number($("#ddelimage").val());
+                                    targetElm = $("#drag-" + sigid + "");
+                                    drawPageHtml('resizepage');
+                                    //console.log('Custom button clicked');
+                                    //return false;
+                                }
+                            },
                             ok: {
-                                label: "Save!",
+                                label: "حفظ",
                                 className: 'btn-info',
                                 callback: function () {
-                                    var percntage = Number($("#ddelimage").val());
+                                    percntage = Number($("#ddelimage").val());
                                     $("#txtheight").val(((Number(origninH) * (percntage / 100))))
                                     $("#txtwidth").val(((Number(origninW) * (percntage / 100))))
                                     hw = Math.round($("#txtwidth").val());
                                     hh = Math.round($("#txtheight").val());
                                     UpdateSizeBarcode(sigid);
-                                    $(".drag-drop[data-id='" + sigid + "']").css('width', hw + 'px');
-                                    $(".drag-drop[data-id='" + sigid + "']").css('height', hh + 'px');
+                                    $(".drag-lable[data-id='" + sigid + "']").css('width', hw + 'px');
+                                    $(".drag-lable[data-id='" + sigid + "']").css('height', hh + 'px');
                                 }
                             }
                         }
                     });
                 }
                 if (key == "delete") {
+                    debugger;
                     var sigid = $(this).data("id");
-                    DeleteBarcode(sigid);
+                    var dialog = bootbox.dialog({
+                        title: 'تأكيد الحذف',
+                        message: '<p></p>',
+                        buttons: {
+                            cancel: {
+                                label: "الغاء",
+                                className: 'btn-danger',
+                                callback: function () {
+                                }
+                            },
+                            noclose: {
+                                label: "تحديد صفحات",
+                                className: 'btn-warning',
+                                callback: function () {
+                                    percntage = Number($("#ddelimage").val());
+                                    targetElm = $("#drag-" + sigid + "");
+                                    drawPageHtml('deletepage');
+                                    //console.log('Custom button clicked');
+                                    //return false;
+                                }
+                            },
+                            ok: {
+                                label: "حذف",
+                                className: 'btn-info',
+                                callback: function () {
+                                    DeleteBarcode(sigid);
+                                }
+                            }
+                        }
+                    });
+                }
+                if (key == "copy") {
+                    targetElm = $("#drag-" + $(this).data("id") + "");
+                    drawPageHtml('copypage');
+
                 }
             },
             items: {
                 "edit": { name: "تغير الحجم", icon: "fa-picture-o" },
                 "delete": { name: "حذف", icon: "fa-trash-o", },
+                "copy": { name: "تكرار", icon: "fa-copy", },
                 "quit": {
                     name: "خروج", icon: function () {
                         return 'context-menu-icon context-menu-icon-quit';
@@ -349,6 +401,7 @@ function addCanavas(pageIndex) {
     var waterMark = $("#hdnCurrentName").val();
     wmContext.fillText(waterMark, -width / 2, height / 2);
 }
+var pageHeight = 0;
 function renderPage(pageNumber, canvas) {
     thePdf.getPage(pageNumber).then(function (page) {
         viewport = page.getViewport(scale);
@@ -359,10 +412,13 @@ function renderPage(pageNumber, canvas) {
         //call signture
         $(".context-menu").show();
         myApp.hidePreloader();
-        //alert("pdf loaded end");
+        if (pageHeight == 0) {
+            pageHeight = Number($('#page1').attr('height'));
+        }
+        //alert();
     });
-
 }
+
 $('#viewer').dblclick(function (e) {
     //hl = (e.pageX + $(this).offset().left - 20);
     ////var left = hl + 'px !important';
@@ -606,10 +662,10 @@ function GetAllSigntures() {
                         hh = jsdata[i].Height;
                     }
                 }
-                if (jsdata[i].Transform == "" || jsdata[i].Transform == null )
+                if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
                     html += '<img id="dragsign-' + jsdata[i].Id + '"  class="context-menu drag-drop can-drop" data-type="0" data-user="' + jsdata[i].UserId + '" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Signture + '" >';
                 else {
-                    
+
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
                     html += '<img id="dragsign-' + jsdata[i].Id + '"  class="context-menu drag-drop can-drop" data-type="0" data-user="' + jsdata[i].UserId + '" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Signture + '"  data-x="' + XP + '" data-y="' + YP + '">';
@@ -646,10 +702,10 @@ function GetAllBarcods() {
                 if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
                     html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable  can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
                 else {
-                    
+
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP+ '" data-y="' + YP + '">';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '">';
                 }
                 //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
             }
@@ -821,30 +877,29 @@ function DeleteSigntures(id) {
 
 }
 function DeleteBarcode(id) {
-    bootbox.confirm("تأكيد الحذف ؟", function (result) {
-        if (result) {
-            $.ajax({
-                type: "POST",
-                url: "/AjexServer/ajexresponse.aspx/DeleteBarcode",
-                data: "{id:'" + id + "'}",
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    var jsdata = JSON.parse(data.d);
-                    if (jsdata != false) {
-                        $(".drag-drop[data-id='" + id + "']").remove();
-                    }
-                    else {
-                        alert("خطا ف الحذف");
-                    }
-                },
-                error: function (result) {
-                    // alert("Error");
-                }
-            });
+    //bootbox.confirm("تأكيد الحذف ؟", function (result) {
+
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/DeleteBarcode",
+        data: "{id:'" + id + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            if (jsdata != false) {
+                $(".drag-lable[data-id='" + id + "']").remove();
+            }
+            else {
+                alert("خطا ف الحذف");
+            }
+        },
+        error: function (result) {
+            // alert("Error");
         }
     });
-
+    //    }
+    //});
 }
 $(document).ajaxSend(function () {
     myApp.showPreloader();
@@ -1057,4 +1112,189 @@ function getOffset(el) {
         left: (rect.left + window.scrollX),
         top: (rect.top + window.scrollY)
     };
+}
+
+function getPageAccorddingTotarnsform(el) {
+    var page = 1;
+    var yaxis = $(el).attr("data-y");
+    if (yaxis <= pageHeight) {
+        //return page;
+    }
+    else {
+        while (yaxis > pageHeight) {
+            page++;
+            yaxis = yaxis - pageHeight;
+        }
+    }
+    return page;
+}
+var op = '';
+var pagesLength = 0;
+function drawPageHtml(opration) {
+    op = opration;
+    var collection = $("#thumbnailView").find("div");
+    if (opration == 'copypage') { // copy all not current
+        var html = '';
+        for (var i = 0; i < collection.length; i++) {
+            pagesLength = Number($(collection[i]).attr("data-index"));
+            var canvas = $(collection[i]).find('canvas');
+            if ($(collection[i]).hasClass('thumbnailSelectionRing') == false) {
+                var url = canvas[0].toDataURL();
+                //document.getElementById('image_for_crop').appendChild(image);
+                html += "<div class=\"col-md-3\">";
+                html += "                            <div class=\"custom-control custom-checkbox image-checkbox\">";
+                html += "                                <input type=\"checkbox\" class=\"custom-control-input page-checkbox\" value='" + $(collection[i]).attr("data-index") + "'> الصفحة " + $(collection[i]).attr("data-index") + "";
+                html += "                                <label class=\"custom-control-label\" for=\"ck1a\">";
+                //html += image;
+                // html +=
+                html += "                                    <img src=\"" + url + "\" alt=\"#\" class=\"img-fluid\">";
+                html += "                                <\/label>";
+                html += "                            <\/div>";
+                html += "                        <\/div>";
+            }
+        }
+        $('.div-list-pages').html(html);
+        $("#pageModal").modal('show');
+    }
+    if (opration == 'resizepage' || opration == 'deletepage') {
+        //get pages have barcode
+        var barcodePagesArr = [];
+        var collect = $("img[data-type=1]");
+        for (var i = 0; i < collect.length; i++) {
+            //var searchX = Number($(collect[i]).attr("data-x"));
+            barcodePagesArr.push(getPageAccorddingTotarnsform($(collect[i])));
+        }
+        var html = '';
+        for (var i = 0; i < collection.length; i++) {
+            pagesLength = Number($(collection[i]).attr("data-index"));
+            if (jQuery.inArray(Number($(collection[i]).attr("data-index")), barcodePagesArr) !== -1) {
+                var canvas = $(collection[i]).find('canvas');
+                var url = canvas[0].toDataURL();
+                //document.getElementById('image_for_crop').appendChild(image);
+                html += "<div class=\"col-md-3\">";
+                html += "                            <div class=\"custom-control custom-checkbox image-checkbox\">";
+                html += "                                <input type=\"checkbox\" class=\"custom-control-input page-checkbox\" value='" + $(collection[i]).attr("data-index") + "'> الصفحة " + $(collection[i]).attr("data-index") + "";
+                html += "                                <label class=\"custom-control-label\" for=\"ck1a\">";
+                //html += image;
+                // html +=
+                html += "                                    <img src=\"" + url + "\" alt=\"#\" class=\"img-fluid\">";
+                html += "                                <\/label>";
+                html += "                            <\/div>";
+                html += "                        <\/div>";
+            }
+        }
+        $('.div-list-pages').html(html);
+        $("#pageModal").modal('show');
+    }
+}
+function saveChanges() {
+
+    //var elm = $(targetElm);
+    var currentElmPage = getPageAccorddingTotarnsform(targetElm);
+    var xVal = Number($(targetElm).attr("data-x"));
+    var yVal = Number($(targetElm).attr("data-y"));
+
+    if (op == 'copypage') { // copy all not current
+        var trasnList = "";
+        var collection = $(".page-checkbox");
+        for (var i = 0; i < collection.length; i++) {
+            if ($(collection[i]).is(":checked")) {
+                var copyPage = Number($(collection[i]).val());
+                if (copyPage < currentElmPage) {
+                    var ynewVal = yVal - ((currentElmPage - copyPage) * pageHeight);
+                    trasnList += 'transform: translate( ' + xVal + 'px, ' + ynewVal + 'px);';
+                }
+                else {
+                    var ynewVal = yVal + ((copyPage - currentElmPage) * pageHeight);
+                    trasnList += 'transform: translate( ' + xVal + 'px, ' + ynewVal + 'px);';
+                }
+            }
+        }
+        CopyBarcode(trasnList);
+        // call server to add
+    }
+    if (op == 'deletepage') {
+        var selectdPages = [];
+        var collection = $(".page-checkbox");
+        for (var i = 0; i < collection.length; i++) {
+            if ($(collection[i]).is(":checked")) {
+                selectdPages.push(Number($(collection[i]).val()));
+            }
+        }
+        var collect = $("img[data-type=1]");
+        for (var i = 0; i < collect.length; i++) {
+            var cpage = getPageAccorddingTotarnsform($(collect[i]));
+            if (jQuery.inArray(cpage, selectdPages) !== -1) {
+                var sigid = $($(collect[i])).data("id")
+                DeleteBarcode(sigid);
+            }
+        }
+        $("#pageModal").modal('hide');
+    }
+    if (op == 'resizepage') {
+        var selectdPages = [];
+        var collection = $(".page-checkbox");
+        for (var i = 0; i < collection.length; i++) {
+            if ($(collection[i]).is(":checked")) {
+                selectdPages.push(Number($(collection[i]).val()));
+            }
+        }
+        var collect = $("img[data-type=1]");
+        for (var i = 0; i < collect.length; i++) {
+            debugger;
+            //var searchX = Number($(collect[i]).attr("data-x"));
+            var cpage = getPageAccorddingTotarnsform($(collect[i]));
+            if (jQuery.inArray(cpage, selectdPages) !== -1) {
+                //deleted this elemnt
+                origninW = $($(collect[i])).width();
+                origninH = $($(collect[i])).height();
+                var sigid = $($(collect[i])).data("id");
+                //$("#txtheight").val()
+                //$("#txtwidth").val()
+                hw = Math.round(((Number(origninW) * (percntage / 100))));
+                hh = Math.round(((Number(origninH) * (percntage / 100))));
+                UpdateSizeBarcode(sigid);
+                //debugger;
+                $(".drag-lable[data-id='" + sigid + "']").css('width', hw + 'px');
+                $(".drag-lable[data-id='" + sigid + "']").css('height', hh + 'px');
+            }
+        }
+        $("#pageModal").modal('hide');
+    }
+}
+function CopyBarcode(trasnList) {
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/CopyBarcode",
+        data: "{id:'" + $(targetElm).attr('data-id') + "',tans:'" + trasnList + "',document:'" + documentId + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $("#pageModal").modal('hide');
+
+            var jsdata = JSON.parse(data.d);
+            var html = "";
+            for (var i = 0; i < jsdata.length; i++) {
+                //save latest height
+                if (jsdata[i].UserId == userId) {
+                    if (jsdata[i].Width != undefined && jsdata[i].Width != '' && jsdata[i].Width != null) {
+                        hw = jsdata[i].Width;
+                        hh = jsdata[i].Height;
+                    }
+                }
+                if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" />';
+                else {
+
+                    var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
+                    var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '"/>';
+                }
+            }
+            $("#viewer").prepend(html);
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
 }

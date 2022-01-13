@@ -43,8 +43,14 @@ See https://github.com/adobe-type-tools/cmap-resources
         .context-menu {
             display: none;
         }
+
+        .img-fluid {
+            width: 100%;
+            border: 1px solid;
+        }
     </style>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <%--    <link href="css/bootstrap-image-checkbox.css" rel="stylesheet" />--%>
     <style>
         canvas {
             z-index: -2 !important;
@@ -260,6 +266,41 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
         </div>
     </div>
+    <div id="pageModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">اداره الصفحات</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="if($(this).is(':checked')){$('.page-checkbox').prop('checked',true);}else{$('.page-checkbox').prop('checked',false);}">
+                        <label class="form-check-label" for="flexCheckDefault">
+                           اختيار الكل
+                        </label>
+                    </div>
+                    <div class="row div-list-pages">
+                        <%--<div class="col-md-3">
+                            <div class="custom-control custom-checkbox image-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="ck1a"> page1
+                                <label class="custom-control-label" for="ck1a">
+                                    <img src="https://iqbalfn.github.io/bootstrap-image-checkbox/img/annie-spratt.jpg" alt="#" class="img-fluid">
+                                </label>
+                            </div>
+                        </div>--%>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="saveChanges();">حفظ التغييرات</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <input type="hidden" id="hdnCurrentName" runat="server" />
     <!-- outerContainer -->
     <div id="printContainer"></div>
@@ -280,8 +321,6 @@ See https://github.com/adobe-type-tools/cmap-resources
     <script src="Scripts/pdfViewr.js"></script>
     <script src="viewer.js"></script>
     <script src="JS/bootstrap.min.js"></script>
-
-
     <%--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>--%>
     <%-- <script type="text/javascript">
         var currentUserName = Session["userName"].ToString();

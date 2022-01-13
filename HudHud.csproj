@@ -369,6 +369,7 @@
     <Content Include="Controls\folderTree.ascx" />
     <Content Include="css\awsf.css" />
     <Content Include="css\balloon.css" />
+    <Content Include="css\bootstrap-image-checkbox.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\color-picker-h.png" />
     <Content Include="css\color-picker-sv.png" />
@@ -3541,6 +3542,7 @@
     <Content Include="Assets\bootstrap-5.1.3-dist\js\bootstrap.esm.min.js.map" />
     <Content Include="Assets\bootstrap-5.1.3-dist\js\bootstrap.js.map" />
     <Content Include="Assets\bootstrap-5.1.3-dist\js\bootstrap.min.js.map" />
+    <Content Include="css\bootstrap-image-checkbox.css.map" />
     <None Include="DataSet1.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
