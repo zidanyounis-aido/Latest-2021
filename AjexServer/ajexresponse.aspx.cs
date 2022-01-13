@@ -421,7 +421,22 @@ namespace dms.AjexServer
                 return serializer.Serialize("false");
             }
         }
-
+        [WebMethod]
+        public static string UpdateSignPosition(string top, string left, string transform, int id)
+        {
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                string q = "update SignatureTB set  [top]=" + top + ",[Left]=" + left + ",[Transform]='" + transform + "' where id=" + id + "";
+                c.NonQuery(q);
+                return serializer.Serialize("true");
+            }
+            catch (Exception ex)
+            {
+                return serializer.Serialize("false");
+            }
+        }
         [WebMethod]
         public static string GetAllSigntures(string document)
         {
@@ -429,13 +444,14 @@ namespace dms.AjexServer
             try
             {
                 CommonFunction.clsCommon c = new CommonFunction.clsCommon();
-                string query = "SELECT  Id, Signture, Documnet, UserId, Width, Height, [Top], [Left] FROM dbo.SignatureTB where Documnet='" + document.ToString() + "'";
+                string query = "SELECT  Id, Signture, Documnet, UserId, Width, Height, [Top], [Left],Transform FROM dbo.SignatureTB where Documnet='" + document.ToString() + "'";
                 DataTable dt = c.GetDataAsDataTable(query);
                 foreach (var item in dt.AsEnumerable())
                 {
                     SignatureTB obj = new SignatureTB();
                     obj.Id = item.Field<int>("Id");
                     obj.Documnet = item.Field<string>("Documnet");
+                    obj.Transform = item.Field<string>("Transform");
                     obj.Width = item.Field<string>("Width");
                     obj.Height = item.Field<string>("Height");
                     obj.Top = item.Field<string>("Top");

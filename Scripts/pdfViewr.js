@@ -85,8 +85,12 @@ $(function () {
                     AddLable();
                 }
                 if (key == "addsigne") {
-                    var top = $('#viewer').scrollTop() + currentContextYValue - $('#viewer').offset().top;
-                    var left = currentContextXValue - $('#viewer').offset().left;
+                    //var top = $('#viewer').scrollTop() + currentContextYValue - $('#viewer').offset().top;
+                    //var left = currentContextXValue - $('#viewer').offset().left;
+                    //hl = left;
+                    //ht = top;
+                    var top = currentContextYValue;
+                    var left = currentContextXValue;
                     hl = left;
                     ht = top;
                     AddSignture();
@@ -170,7 +174,7 @@ $(function () {
             }
         });
         $.contextMenu({
-            selector: '.drag-drop',
+            selector: '.drag-lable',
             callback: function (key, options, e) {
                 var m = "clicked: " + key;
                 //if (key == "cut") {
@@ -602,7 +606,15 @@ function GetAllSigntures() {
                         hh = jsdata[i].Height;
                     }
                 }
-                html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
+                if (jsdata[i].Transform == "" || jsdata[i].Transform == null )
+                    html += '<img id="dragsign-' + jsdata[i].Id + '"  class="context-menu drag-drop can-drop" data-type="0" data-user="' + jsdata[i].UserId + '" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Signture + '" >';
+                else {
+                    
+                    var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
+                    var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
+                    html += '<img id="dragsign-' + jsdata[i].Id + '"  class="context-menu drag-drop can-drop" data-type="0" data-user="' + jsdata[i].UserId + '" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Signture + '"  data-x="' + XP + '" data-y="' + YP + '">';
+                }
+                //html += "<img id='dragsign-" + jsdata[i].Id +"' class='context-menu drag-sign drag-drop  can-drop' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;' />";
             }
             $("#viewer").prepend(html);
         },
@@ -631,13 +643,13 @@ function GetAllBarcods() {
                     }
                 }
 
-                if (jsdata[i].Transform == "")
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
+                if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable  can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
                 else {
-                    debugger;
+                    
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP+ '" data-y="' + YP + '">';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP+ '" data-y="' + YP + '">';
                 }
                 //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
             }
@@ -658,7 +670,8 @@ function AddSignture() {
         success: function (data) {
             var jsdata = JSON.parse(data.d);
             if (jsdata != false) {
-                $("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + signture + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
+                $("#viewer").prepend('<img id="dragsign-' + jsdata + '" class="drag-drop context-menu can-drop" data-type="0" data-user="' + userId + '" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + signture + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
+                //$("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + signture + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
                 $(".context-menu").show();
             }
             else {
@@ -693,6 +706,28 @@ function UpdateLablePosition(id) {
         }
     });
 }
+function UpdateSignPosition(id) {
+    id = Number(id);
+    var elmName = 'dragsign-' + id;
+    var el = document.getElementById(elmName);
+    var topValue = getOffset(el).top;
+    var leftValue = getOffset(el).left;
+    var transformValue = 'transform: translate(' + $('#' + elmName + '').css('transform').split(',')[4] + 'px,' + $('#' + elmName + '').css('transform').split(',')[5].replace(')', '') + 'px);';
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/UpdateSignPosition",
+        data: "{top:'" + topValue + "',left:'" + leftValue + "',transform:'" + transformValue + "',id:" + id + "}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            console.log('update position top =>' + topValue + ",left =>" + leftValue);
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
 function AddLable() {
     $.ajax({
         type: "POST",
@@ -704,7 +739,7 @@ function AddLable() {
             var jsdata = JSON.parse(data.d);
             if (jsdata != false) {
                 var barcode = $('#hdnDocLable').val();
-                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop can-drop" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
+                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
                 //$("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + lable + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
                 //$(".context-menu").show();
             }
@@ -1003,7 +1038,12 @@ function allowDrag() {
                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                 y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
             var id = $(target).attr("data-id");
-            UpdateLablePosition(id);
+            if ($(target).attr("data-type") == 1) {
+                UpdateLablePosition(id);
+            }
+            else {
+                UpdateSignPosition(id);
+            }
         } catch (e) {
 
         }
