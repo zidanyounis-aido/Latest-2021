@@ -9,6 +9,7 @@ using dms.VM;
 using System.Web.UI.HtmlControls;
 using System.IO;
 using System.Text;
+using IronBarCode;
 
 namespace dms.Screen
 {
@@ -1081,6 +1082,40 @@ namespace dms.Screen
             // DMS.BLL.specialCases specialCases = new DMS.BLL.specialCases();
             DMS.BLL.specialCases.SaveInOutSerial(int.Parse(txtDocID.Text),1);
             linkExport.Visible = false;
+
+            try
+            {
+                string serial = c.GetDataAsScalar("select top 1 serial from documents where docID=" + int.Parse(txtDocID.Text) + "").ToString();
+                string typeId = c.GetDataAsScalar("select top 1 typeId from documents where docID=" + int.Parse(txtDocID.Text) + "").ToString();
+                //using IronBarCode;
+                GeneratedBarcode MyBarCode = IronBarCode.BarcodeWriter.CreateBarcode("00000000" + txtDocID.Text, BarcodeWriterEncoding.Code128, 200, 50);
+                string txtBarCode = "العنوان : " + txtDocName.Text + "";
+                txtBarCode += "\r\n";
+                txtBarCode += "التاريخ : " + DateTime.Now.ToString("dd-MM-yyyy") + "   " + "رقم المستند :" + txtDocID.Text;
+                if (typeId != "" && typeId != null)
+                {
+                    if (typeId == "1")
+                    {
+                        txtBarCode += "\r\n";
+                        txtBarCode += "رقم الصادر : " + serial;
+                    }
+                    else
+                    {
+                        txtBarCode += "\r\n";
+                        txtBarCode += "رقم الوارد : " + serial;
+                    }
+                }
+                string filename = "/images/barcode" + DateTime.Now.ToString("ddMMyyyyhhmmssfff") + ".png";
+                MyBarCode.AddAnnotationTextAboveBarcode(txtBarCode);
+                MyBarCode.SaveAsPng(Server.MapPath("~" + filename));
+                c.NonQuery("update documents set Barcode='" + filename + "' where docID=" + int.Parse(txtDocID.Text));
+            }
+            catch (Exception ex)
+            {
+
+                //throw;
+            }
+
             Response.Write("<script>alert('تم تصدير الملف');</script>");
         }
 
