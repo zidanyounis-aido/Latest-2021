@@ -439,7 +439,63 @@ namespace dms.AjexServer
                 return serializer.Serialize("false");
             }
         }
-
+        [WebMethod]
+        public static string CopySignture(int id, string tans, string document)
+        {
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                CommonFunction.clsCommon c = new CommonFunction.clsCommon();
+                //Example 5
+                string inValues = "";
+                var transArr = tans.Split(';');
+                foreach (var item in transArr)
+                {
+                    if (item != "")
+                    {
+                        Hashtable parameters = new Hashtable();
+                        parameters.Add("@id", id);
+                        parameters.Add("@tansform", item + ";");
+                        c.NonQueryFromSP("CopySignture", parameters);
+                        string q = "select top 1 max(Id) from SignatureTB where Documnet='" + document + "'";
+                        int maxid = int.Parse(c.GetDataAsScalar(q).ToString());
+                        if (inValues == "")
+                        {
+                            inValues = maxid.ToString();
+                        }
+                        else
+                        {
+                            inValues += "," + maxid;
+                        }
+                    }
+                }
+                //int id = c.NonQuery("insert into SignatureTB values('" + signture + "','" + document + "'," + user + ",'" + width + "','" + height + "','" + top + "','" + left + "')");
+                List<SignatureTB> list = new List<SignatureTB>();
+                string query = "SELECT  Id, Signture, Documnet, UserId, Width, Height, [Top], [Left],Transform FROM dbo.SignatureTB where id in(" + inValues + ")";
+                DataTable dt = c.GetDataAsDataTable(query);
+                foreach (var item in dt.AsEnumerable())
+                {
+                    SignatureTB obj = new SignatureTB();
+                    obj.Id = item.Field<int>("Id");
+                    obj.Documnet = item.Field<string>("Documnet");
+                    obj.Transform = item.Field<string>("Transform");
+                    obj.Width = item.Field<string>("Width");
+                    obj.Height = item.Field<string>("Height");
+                    obj.Top = item.Field<string>("Top");
+                    obj.Left = item.Field<string>("Left");
+                    obj.Signture = item.Field<string>("Signture");
+                    obj.UserId = item.Field<int>("UserId");
+                    list.Add(obj);
+                }
+                JavaScriptSerializer jscript = new JavaScriptSerializer();
+                return jscript.Serialize(list);
+                //return serializer.Serialize(maxid);
+            }
+            catch (Exception ex)
+            {
+                return serializer.Serialize("false");
+            }
+        }
         [WebMethod]
         public static string UpdateLablePosition(string top, string left, string transform, int id)
         {

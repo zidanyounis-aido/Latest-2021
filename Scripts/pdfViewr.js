@@ -117,38 +117,36 @@ $(function () {
             selector: '.context-menu[data-user=' + userId + ']',
             callback: function (key, options, e) {
                 var m = "clicked: " + key;
-                //if (key == "cut") {
-                //    oldFolderPath = [];
-                //    var divpathList = $("#divpathbar a");
-                //    for (var i = 0; i < divpathList.length; i++) {
-                //        oldFolderPath.push($(divpathList[i]).data("id"));
-                //    }
-                //    isExistCopy = true;
-                //    copiedtaskid = 0;
-                //    copiedcontainerid = $(this).data("id");
-                //    toastr.success(elementMsg, '');
-                //    ShowtoggleCopyPaste(1);//show paste btn
-                //}
                 if (key == "edit") {
+                    optype = 0;
                     origninW = $(this).width();
                     origninH = $(this).height()
                     var sigid = $(this).data("id");
-
                     var dialog = bootbox.dialog({
                         title: '',
                         message: '<div class="form-group"> <label for="">النسبة المئوية</label> <select class="form-control" id="ddelimage" onclick="changeImage();"> <option value="200">200%</option> <option value="100">100%</option> <option value="90">90%</option> <option value="80">80%</option> <option value="70">70%</option> <option value="60">60%</option> <option value="50">50%</option> <option value="40">40%</option> <option value="30">30%</option> <option value="20">20%</option> <option value="10">10%</option> </select> </div><div class="form-group" style="display:none;"> <label for="">العرض</label> <input type="text" class="form-control" id="txtwidth" value="' + $(this).width() + '"> </div> <div class="form-group" style="display:none;"> <label for="">الارتفاع</label> <input type="text" class="form-control" id="txtheight" value="' + $(this).height() + '"> </div>',
                         buttons: {
                             cancel: {
-                                label: "cancel",
+                                label: "الغاء",
                                 className: 'btn-danger',
                                 callback: function () {
                                 }
                             },
+                            noclose: {
+                                label: "تحديد صفحات",
+                                className: 'btn-warning',
+                                callback: function () {
+                                    optype = 0;
+                                    percntage = Number($("#ddelimage").val());
+                                    targetElm = $("#dragsign-" + sigid + "");
+                                    drawPageHtml('resizepage');
+                                }
+                            },
                             ok: {
-                                label: "Save!",
+                                label: "حفظ",
                                 className: 'btn-info',
                                 callback: function () {
-                                    var percntage = Number($("#ddelimage").val());
+                                    percntage = Number($("#ddelimage").val());
                                     $("#txtheight").val(((Number(origninH) * (percntage / 100))))
                                     $("#txtwidth").val(((Number(origninW) * (percntage / 100))))
                                     hw = Math.round($("#txtwidth").val());
@@ -162,13 +160,48 @@ $(function () {
                     });
                 }
                 if (key == "delete") {
+                    optype = 0;
                     var sigid = $(this).data("id");
-                    DeleteSigntures(sigid);
+                    var dialog = bootbox.dialog({
+                        title: 'تأكيد الحذف',
+                        message: '<p></p>',
+                        buttons: {
+                            cancel: {
+                                label: "الغاء",
+                                className: 'btn-danger',
+                                callback: function () {
+                                }
+                            },
+                            noclose: {
+                                label: "تحديد صفحات",
+                                className: 'btn-warning',
+                                callback: function () {
+                                    percntage = Number($("#ddelimage").val());
+                                    targetElm = $("#dragsign-" + sigid + "");
+                                    drawPageHtml('deletepage');
+                                }
+                            },
+                            ok: {
+                                label: "حذف",
+                                className: 'btn-info',
+                                callback: function () {
+                                    DeleteSigntures(sigid);
+                                }
+                            }
+                        }
+                    });
+                   
+                }
+                if (key == "copy") {
+                    optype = 0;
+                    targetElm = $("#dragsign-" + $(this).data("id") + "");
+                    drawPageHtml('copypage');
                 }
             },
             items: {
                 "edit": { name: "تغير الحجم", icon: "fa-picture-o" },
                 "delete": { name: "حذف", icon: "fa-trash-o", },
+                "copy": { name: "تكرار", icon: "fa-copy", },
                 "quit": {
                     name: "خروج", icon: function () {
                         return 'context-menu-icon context-menu-icon-quit';
@@ -194,7 +227,7 @@ $(function () {
                 //}
 
                 if (key == "edit") {
-
+                    optype = 1;
                     origninW = $(this).width();
                     origninH = $(this).height();
                     var sigid = $(this).data("id");
@@ -212,6 +245,7 @@ $(function () {
                                 label: "تحديد صفحات",
                                 className: 'btn-warning',
                                 callback: function () {
+                                    optype = 1;
                                     percntage = Number($("#ddelimage").val());
                                     targetElm = $("#drag-" + sigid + "");
                                     drawPageHtml('resizepage');
@@ -237,7 +271,7 @@ $(function () {
                     });
                 }
                 if (key == "delete") {
-                    debugger;
+                    optype = 0;
                     var sigid = $(this).data("id");
                     var dialog = bootbox.dialog({
                         title: 'تأكيد الحذف',
@@ -271,6 +305,7 @@ $(function () {
                     });
                 }
                 if (key == "copy") {
+                    optype = 1;
                     targetElm = $("#drag-" + $(this).data("id") + "");
                     drawPageHtml('copypage');
 
@@ -851,8 +886,8 @@ function UpdateSizeBarcode(id) {
     });
 }
 function DeleteSigntures(id) {
-    bootbox.confirm("تأكيد الحذف ؟", function (result) {
-        if (result) {
+    //bootbox.confirm("تأكيد الحذف ؟", function (result) {
+    //    if (result) {
             $.ajax({
                 type: "POST",
                 url: "/AjexServer/ajexresponse.aspx/DeleteSigntures",
@@ -872,8 +907,8 @@ function DeleteSigntures(id) {
                     // alert("Error");
                 }
             });
-        }
-    });
+    //    }
+    //});
 
 }
 function DeleteBarcode(id) {
@@ -1140,13 +1175,10 @@ function drawPageHtml(opration) {
             var canvas = $(collection[i]).find('canvas');
             if ($(collection[i]).hasClass('thumbnailSelectionRing') == false) {
                 var url = canvas[0].toDataURL();
-                //document.getElementById('image_for_crop').appendChild(image);
                 html += "<div class=\"col-md-3\">";
                 html += "                            <div class=\"custom-control custom-checkbox image-checkbox\">";
                 html += "                                <input type=\"checkbox\" class=\"custom-control-input page-checkbox\" value='" + $(collection[i]).attr("data-index") + "'> الصفحة " + $(collection[i]).attr("data-index") + "";
                 html += "                                <label class=\"custom-control-label\" for=\"ck1a\">";
-                //html += image;
-                // html +=
                 html += "                                    <img src=\"" + url + "\" alt=\"#\" class=\"img-fluid\">";
                 html += "                                <\/label>";
                 html += "                            <\/div>";
@@ -1159,7 +1191,7 @@ function drawPageHtml(opration) {
     if (opration == 'resizepage' || opration == 'deletepage') {
         //get pages have barcode
         var barcodePagesArr = [];
-        var collect = $("img[data-type=1]");
+        var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]");
         for (var i = 0; i < collect.length; i++) {
             //var searchX = Number($(collect[i]).attr("data-x"));
             barcodePagesArr.push(getPageAccorddingTotarnsform($(collect[i])));
@@ -1187,6 +1219,7 @@ function drawPageHtml(opration) {
         $("#pageModal").modal('show');
     }
 }
+var optype = 0;
 function saveChanges() {
 
     //var elm = $(targetElm);
@@ -1210,7 +1243,12 @@ function saveChanges() {
                 }
             }
         }
-        CopyBarcode(trasnList);
+        if (optype== 1) {
+            CopyBarcode(trasnList);
+        }
+        else {
+            CopySignture(trasnList);
+        }
         // call server to add
     }
     if (op == 'deletepage') {
@@ -1221,12 +1259,17 @@ function saveChanges() {
                 selectdPages.push(Number($(collection[i]).val()));
             }
         }
-        var collect = $("img[data-type=1]");
+        var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]") ;
         for (var i = 0; i < collect.length; i++) {
             var cpage = getPageAccorddingTotarnsform($(collect[i]));
             if (jQuery.inArray(cpage, selectdPages) !== -1) {
                 var sigid = $($(collect[i])).data("id")
-                DeleteBarcode(sigid);
+                if (optype == 1) {
+                    DeleteBarcode(sigid);
+                }
+                else {
+                    DeleteSigntures(sigid);
+                }
             }
         }
         $("#pageModal").modal('hide');
@@ -1239,7 +1282,7 @@ function saveChanges() {
                 selectdPages.push(Number($(collection[i]).val()));
             }
         }
-        var collect = $("img[data-type=1]");
+        var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]");
         for (var i = 0; i < collect.length; i++) {
             debugger;
             //var searchX = Number($(collect[i]).attr("data-x"));
@@ -1253,10 +1296,18 @@ function saveChanges() {
                 //$("#txtwidth").val()
                 hw = Math.round(((Number(origninW) * (percntage / 100))));
                 hh = Math.round(((Number(origninH) * (percntage / 100))));
-                UpdateSizeBarcode(sigid);
-                //debugger;
-                $(".drag-lable[data-id='" + sigid + "']").css('width', hw + 'px');
-                $(".drag-lable[data-id='" + sigid + "']").css('height', hh + 'px');
+                if (optype == 1) {
+                    UpdateSizeBarcode(sigid);
+                    //debugger;
+                    $(".drag-lable[data-id='" + sigid + "']").css('width', hw + 'px');
+                    $(".drag-lable[data-id='" + sigid + "']").css('height', hh + 'px');
+                }
+                else {
+                    UpdateSize(sigid);
+                    //debugger;
+                    $(".context-menu[data-id='" + sigid + "']").css('width', hw + 'px');
+                    $(".context-menu[data-id='" + sigid + "']").css('height', hh + 'px');
+                }
             }
         }
         $("#pageModal").modal('hide');
@@ -1289,6 +1340,42 @@ function CopyBarcode(trasnList) {
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
                     html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '"/>';
+                }
+            }
+            $("#viewer").prepend(html);
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
+}
+
+function CopySignture(trasnList) {
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/CopySignture",
+        data: "{id:'" + $(targetElm).attr('data-id') + "',tans:'" + trasnList + "',document:'" + documentId + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            $("#pageModal").modal('hide');
+            var jsdata = JSON.parse(data.d);
+            var html = "";
+            for (var i = 0; i < jsdata.length; i++) {
+                //save latest height
+                if (jsdata[i].UserId == userId) {
+                    if (jsdata[i].Width != undefined && jsdata[i].Width != '' && jsdata[i].Width != null) {
+                        hw = jsdata[i].Width;
+                        hh = jsdata[i].Height;
+                    }
+                }
+                if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
+                    html += '<img id="dragsign-' + jsdata[i].Id + '"  class="context-menu drag-drop can-drop" data-type="0" data-user="' + jsdata[i].UserId + '" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Signture + '" >';
+                else {
+
+                    var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
+                    var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
+                    html += '<img id="dragsign-' + jsdata[i].Id + '"  class="context-menu drag-drop can-drop" data-type="0" data-user="' + jsdata[i].UserId + '" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Signture + '"  data-x="' + XP + '" data-y="' + YP + '">';
                 }
             }
             $("#viewer").prepend(html);

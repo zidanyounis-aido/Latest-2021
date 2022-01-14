@@ -68,6 +68,9 @@ See https://github.com/adobe-type-tools/cmap-resources
             border: 0.3px solid;
             padding-bottom: 5px;
         }
+        .context-menu {
+        display:inline !important;
+        }
         /*.navbar-fixed-left {
             width: 96px;
             position: fixed;
