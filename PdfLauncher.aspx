@@ -38,6 +38,8 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link href="Scripts/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" />
     <link href="css/awsf.css" rel="stylesheet" />
     <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://printjs-4de6.kxcdn.com/print.min.css">
+
     <link href="viewer.css" rel="stylesheet" />
     <style>
         .context-menu {
@@ -52,9 +54,9 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <%--    <link href="css/bootstrap-image-checkbox.css" rel="stylesheet" />--%>
     <style>
-        canvas {
+       /* canvas {
             z-index: -2 !important;
-        }
+        }*/
 
         /* .drag-drop {
             z-index: 1 !important;
@@ -68,8 +70,9 @@ See https://github.com/adobe-type-tools/cmap-resources
             border: 0.3px solid;
             padding-bottom: 5px;
         }
+
         .context-menu {
-        display:inline !important;
+            display: inline !important;
         }
         /*.navbar-fixed-left {
             width: 96px;
@@ -269,7 +272,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
         </div>
     </div>
-    <div id="pageModal"  class="modal" tabindex="-1" role="dialog">
+    <div id="pageModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -282,10 +285,10 @@ See https://github.com/adobe-type-tools/cmap-resources
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="if($(this).is(':checked')){$('.page-checkbox').prop('checked',true);}else{$('.page-checkbox').prop('checked',false);}">
                         <label class="form-check-label" for="flexCheckDefault">
-                           اختيار الكل
+                            اختيار الكل
                         </label>
                     </div>
-                    <div class="row div-list-pages" style="overflow-y: scroll;height: 500px;">
+                    <div class="row div-list-pages" style="overflow-y: scroll; height: 500px;">
                         <%--<div class="col-md-3">
                             <div class="custom-control custom-checkbox image-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="ck1a"> page1
@@ -324,6 +327,13 @@ See https://github.com/adobe-type-tools/cmap-resources
     <script src="Scripts/pdfViewr.js"></script>
     <script src="viewer.js"></script>
     <script src="JS/bootstrap.min.js"></script>
+     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+  <%--  <script>
+        function printDiv() {
+            printJS('printJS-form', 'html')
+        }
+    </script--%>>
+
     <%--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>--%>
     <%-- <script type="text/javascript">
         var currentUserName = Session["userName"].ToString();

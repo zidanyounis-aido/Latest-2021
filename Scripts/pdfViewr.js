@@ -407,9 +407,9 @@ function addCanavas(pageIndex) {
     wmCanvas.width = origCanvas.width;
     wmCanvas.height = origCanvas.height;
     if (marginValue != 0)
-        wmCanvas.setAttribute("style", "position:absolute;border:1px solid black;margin-top:" + marginValue + "px;")
+        wmCanvas.setAttribute("style", "position:absolute;margin-top:" + marginValue + "px;")
     else {
-        wmCanvas.setAttribute("style", "position:absolute;border:1px solid black;")
+        wmCanvas.setAttribute("style", "position:absolute;")
     }
 
     if (container.firstChild)
@@ -1155,7 +1155,7 @@ function getOffset(el) {
 var op = '';
 var pagesLength = 0;
 function drawPageHtml(opration) {
-    debugger;
+    
     op = opration;
     var collection = $("#thumbnailView").find("div");
     if (opration == 'copypage') { // copy all not current
@@ -1274,7 +1274,7 @@ function saveChanges() {
         }
         var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]");
         for (var i = 0; i < collect.length; i++) {
-            debugger;
+            
             //var searchX = Number($(collect[i]).attr("data-x"));
             var cpage = getPageAccorddingTotarnsform($(collect[i]));
             if (jQuery.inArray(cpage, selectdPages) !== -1) {
@@ -1288,13 +1288,13 @@ function saveChanges() {
                 hh = Math.round(((Number(origninH) * (percntage / 100))));
                 if (optype == 1) {
                     UpdateSizeBarcode(sigid);
-                    //debugger;
+                    //
                     $(".drag-lable[data-id='" + sigid + "']").css('width', hw + 'px');
                     $(".drag-lable[data-id='" + sigid + "']").css('height', hh + 'px');
                 }
                 else {
                     UpdateSize(sigid);
-                    //debugger;
+                    //
                     $(".context-menu[data-id='" + sigid + "']").css('width', hw + 'px');
                     $(".context-menu[data-id='" + sigid + "']").css('height', hh + 'px');
                 }
@@ -1405,7 +1405,7 @@ function getPageAccorddingTotarnsform(el) {
 }
 var fromtop = 0;
 function calcDistance(copypage, currentpage) {
-    debugger;
+    
     var totalDistance = 0;
     //if (copypage < currentpage) {
     //    //go to top
