@@ -176,6 +176,7 @@ $(function () {
                                 label: "تحديد صفحات",
                                 className: 'btn-warning',
                                 callback: function () {
+                                    optype = 0;
                                     percntage = Number($("#ddelimage").val());
                                     targetElm = $("#dragsign-" + sigid + "");
                                     drawPageHtml('deletepage');
@@ -190,7 +191,7 @@ $(function () {
                             }
                         }
                     });
-                   
+
                 }
                 if (key == "copy") {
                     optype = 0;
@@ -287,6 +288,7 @@ $(function () {
                                 label: "تحديد صفحات",
                                 className: 'btn-warning',
                                 callback: function () {
+                                    optype = 1;
                                     percntage = Number($("#ddelimage").val());
                                     targetElm = $("#drag-" + sigid + "");
                                     drawPageHtml('deletepage');
@@ -888,25 +890,25 @@ function UpdateSizeBarcode(id) {
 function DeleteSigntures(id) {
     //bootbox.confirm("تأكيد الحذف ؟", function (result) {
     //    if (result) {
-            $.ajax({
-                type: "POST",
-                url: "/AjexServer/ajexresponse.aspx/DeleteSigntures",
-                data: "{id:'" + id + "'}",
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    var jsdata = JSON.parse(data.d);
-                    if (jsdata != false) {
-                        $(".context-menu[data-id='" + id + "']").remove();
-                    }
-                    else {
-                        alert("خطا ف الحذف");
-                    }
-                },
-                error: function (result) {
-                    // alert("Error");
-                }
-            });
+    $.ajax({
+        type: "POST",
+        url: "/AjexServer/ajexresponse.aspx/DeleteSigntures",
+        data: "{id:'" + id + "'}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            var jsdata = JSON.parse(data.d);
+            if (jsdata != false) {
+                $(".context-menu[data-id='" + id + "']").remove();
+            }
+            else {
+                alert("خطا ف الحذف");
+            }
+        },
+        error: function (result) {
+            // alert("Error");
+        }
+    });
     //    }
     //});
 
@@ -1149,23 +1151,11 @@ function getOffset(el) {
     };
 }
 
-function getPageAccorddingTotarnsform(el) {
-    var page = 1;
-    var yaxis = $(el).attr("data-y");
-    if (yaxis <= pageHeight) {
-        //return page;
-    }
-    else {
-        while (yaxis > pageHeight) {
-            page++;
-            yaxis = yaxis - pageHeight;
-        }
-    }
-    return page;
-}
+
 var op = '';
 var pagesLength = 0;
 function drawPageHtml(opration) {
+    debugger;
     op = opration;
     var collection = $("#thumbnailView").find("div");
     if (opration == 'copypage') { // copy all not current
@@ -1234,16 +1224,16 @@ function saveChanges() {
             if ($(collection[i]).is(":checked")) {
                 var copyPage = Number($(collection[i]).val());
                 if (copyPage < currentElmPage) {
-                    var ynewVal = yVal - ((currentElmPage - copyPage) * pageHeight);
+                    var ynewVal = calcDistance(copyPage, currentElmPage);
                     trasnList += 'transform: translate( ' + xVal + 'px, ' + ynewVal + 'px);';
                 }
                 else {
-                    var ynewVal = yVal + ((copyPage - currentElmPage) * pageHeight);
+                    var ynewVal = calcDistance(copyPage, currentElmPage);//yVal + ((copyPage - currentElmPage) * pageHeight);
                     trasnList += 'transform: translate( ' + xVal + 'px, ' + ynewVal + 'px);';
                 }
             }
         }
-        if (optype== 1) {
+        if (optype == 1) {
             CopyBarcode(trasnList);
         }
         else {
@@ -1259,7 +1249,7 @@ function saveChanges() {
                 selectdPages.push(Number($(collection[i]).val()));
             }
         }
-        var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]") ;
+        var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]");
         for (var i = 0; i < collect.length; i++) {
             var cpage = getPageAccorddingTotarnsform($(collect[i]));
             if (jQuery.inArray(cpage, selectdPages) !== -1) {
@@ -1384,4 +1374,83 @@ function CopySignture(trasnList) {
             // alert("Error");
         }
     });
+}
+function getPageAccorddingTotarnsform(el) {
+    var page = 1;
+    var yaxis = $(el).attr("data-y");
+    if (yaxis <= pageHeight) {
+        //return page;
+    }
+    else {
+        var cTotalHeight = 0;
+        var pagecount = Number($("[data-index]").length);
+        var isfound = false;
+        for (var i = 1; i <= pagecount; i++) {
+            if (isfound == false) {
+                var pageid = "#page" + i;
+                cTotalHeight = cTotalHeight + Number($(pageid).attr('height'));
+                if (yaxis < cTotalHeight) {
+                    page = i;
+                    isfound = true;
+                    break;
+                }
+            }
+        }
+        //while (yaxis > pageHeight) {
+        //    page++;
+        //    yaxis = yaxis - pageHeight;
+        //}
+    }
+    return page;
+}
+var fromtop = 0;
+function calcDistance(copypage, currentpage) {
+    debugger;
+    var totalDistance = 0;
+    //if (copypage < currentpage) {
+    //    //go to top
+    //    for (var i = currentpage; i >= copypage; i--) {
+    //        var pageid = "#page" + currentpage;
+    //        if (i == currentpage) {
+    //            totalDistance = totalDistance + Number($(pageid).attr("data-y")) + 5;
+    //        }
+    //        else {
+    //            //$('#page1').attr('height')
+    //            totalDistance = totalDistance + Number($(pageid).attr('height')) + 5;
+    //        }
+    //    }
+    //}
+    //else {
+    for (var i = 1; i <= copypage; i++) {
+        var pageid = "#page" + i;
+        //if (i == currentpage) {
+        //    totalDistance = totalDistance + (Number($(pageid).attr('height'))) + 50;
+        //}
+        //else
+        if (i == copypage) {
+            fromtop = calcFromTop(currentpage);
+            totalDistance = totalDistance + fromtop;
+        }
+        else {
+            totalDistance = totalDistance + Number($(pageid).attr('height'));
+        }
+    }
+    //}
+    return totalDistance;
+}
+function calcFromTop(currentpage) {
+    var ft = 0;
+    currentpage = Number(currentpage);
+    //var pageid = "#drag-" + pagex;
+    var currentY = Number($(targetElm).attr("data-y"));
+    for (var i = 1; i <= currentpage; i++) {
+        var thispageid = "#page" + i;
+        if (i == currentpage) {
+            ft = currentY;
+        }
+        else {
+            currentY = currentY - Number($(thispageid).attr("height"))
+        }
+    }
+    return ft;
 }
