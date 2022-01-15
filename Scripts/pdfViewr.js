@@ -1163,7 +1163,7 @@ function drawPageHtml(opration) {
         for (var i = 0; i < collection.length; i++) {
             pagesLength = Number($(collection[i]).attr("data-index"));
             var canvas = $(collection[i]).find('canvas');
-            if ($(collection[i]).hasClass('thumbnailSelectionRing') == false) {
+            if ($(collection[i]).attr('data-index') != getPageAccorddingTotarnsform(targetElm)) {//not select the same page
                 var url = canvas[0].toDataURL();
                 html += "<div class=\"col-md-3\">";
                 html += "                            <div class=\"custom-control custom-checkbox image-checkbox\">";
@@ -1432,7 +1432,7 @@ function calcDistance(copypage, currentpage) {
             totalDistance = totalDistance + fromtop;
         }
         else {
-            totalDistance = totalDistance + Number($(pageid).attr('height'));
+            totalDistance = totalDistance + Number($(pageid).attr('height')) + 5;
         }
     }
     //}

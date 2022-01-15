@@ -269,7 +269,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
         </div>
     </div>
-    <div id="pageModal" class="modal" tabindex="-1" role="dialog">
+    <div id="pageModal"  class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -285,7 +285,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                            اختيار الكل
                         </label>
                     </div>
-                    <div class="row div-list-pages">
+                    <div class="row div-list-pages" style="overflow-y: scroll;height: 500px;">
                         <%--<div class="col-md-3">
                             <div class="custom-control custom-checkbox image-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="ck1a"> page1
