@@ -1,5 +1,6 @@
 ﻿using dms.VM;
 using DMS.Resources;
+using IronBarCode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -347,14 +348,51 @@ namespace dms.AjexServer
         }
 
         [WebMethod]
-        public static string AddLable(string width, string height, string top, string left, int user, string document)
+        public static string  AddLable(string width, string height, string top, string left, int user, string document)
         {
             var serializer = new JavaScriptSerializer();
             try
             {
+                string txtDocID = document.Split('-')[0];
                 CommonFunction.clsCommon c = new CommonFunction.clsCommon();
                 //Example 5
-                string lable = c.GetDataAsScalar("select top 1 Barcode from documents where docID=" + document.Split('-')[0]).ToString();
+                string lable = "";//c.GetDataAsScalar("select top 1 Barcode from documents where docID=" + document.Split('-')[0]).ToString();
+                int sort = int.Parse(c.GetDataAsScalar("select ISNULL(max(DocumentLablesTB.Sort),0) from DocumentLablesTB where Documnet='" + document + "'").ToString()) + 1;
+                try
+                {
+                    string serial = c.GetDataAsScalar("select top 1 serial from documents where docID=" + int.Parse(txtDocID) + "").ToString();
+                    string typeId = c.GetDataAsScalar("select top 1 typeId from documents where docID=" + int.Parse(txtDocID) + "").ToString();
+                    string txtDocName = c.GetDataAsScalar("select top 1 docName from documents where docID=" + int.Parse(txtDocID) + "").ToString();
+                    string docNUM = txtDocID + "-" + sort;
+                    //using IronBarCode;
+                    GeneratedBarcode MyBarCode = IronBarCode.BarcodeWriter.CreateBarcode("00000000" + txtDocID, BarcodeWriterEncoding.Code128, 200, 50);
+                    string txtBarCode = "العنوان : " + txtDocName + "";
+                    txtBarCode += "\r\n";
+                    txtBarCode += "التاريخ : " + DateTime.Now.ToString("dd-MM-yyyy") + "   " + "رقم المستند :" + docNUM;
+                    if (typeId != "" && typeId != null)
+                    {
+                        if (typeId == "1")
+                        {
+                            txtBarCode += "\r\n";
+                            txtBarCode += "رقم الصادر : " + serial;
+                        }
+                        else
+                        {
+                            txtBarCode += "\r\n";
+                            txtBarCode += "رقم الوارد : " + serial;
+                        }
+                    }
+                    string filename = "/images/barcode" + DateTime.Now.ToString("ddMMyyyyhhmmssfff") + ".png";
+                    MyBarCode.AddAnnotationTextAboveBarcode(txtBarCode);
+                    MyBarCode.SaveAsPng(HttpContext.Current.Server.MapPath("~" + filename));
+                    lable = filename;
+                    //c.NonQuery("update documents set Barcode='" + filename + "' where docID=" + int.Parse(txtDocID));
+                }
+                catch (Exception ex)
+                {
+
+                    //throw;
+                }
                 if (lable != null && lable != "")
                 {
                     //int id = c.NonQuery("insert into SignatureTB values('" + signture + "','" + document + "'," + user + ",'" + width + "','" + height + "','" + top + "','" + left + "')");
@@ -366,10 +404,11 @@ namespace dms.AjexServer
                     parameters.Add("@top", top);
                     parameters.Add("@left", left);
                     parameters.Add("@document", document);
+                    parameters.Add("@sort", sort);
                     c.NonQueryFromSP("AddDocumentLable", parameters);
 
                     int maxid = int.Parse(c.GetDataAsScalar("select top 1 max(Id) from DocumentLablesTB where UserId=" + user).ToString());
-                    return serializer.Serialize(maxid);
+                    return serializer.Serialize(maxid+"|"+ lable+"|"+sort);
                 }
                 else
                 {
@@ -414,7 +453,7 @@ namespace dms.AjexServer
                 }
                 //int id = c.NonQuery("insert into SignatureTB values('" + signture + "','" + document + "'," + user + ",'" + width + "','" + height + "','" + top + "','" + left + "')");
                 List<SignatureTB> list = new List<SignatureTB>();
-                string query = "SELECT  Id, Lable, Documnet, UserId, Width, Height, [Top], [Left],Transform FROM dbo.DocumentLablesTB where id in("+inValues+")";
+                string query = "SELECT  Id, Lable, Documnet, UserId, Width, Height, [Top], [Left],Transform,Sort FROM dbo.DocumentLablesTB where id in("+inValues+")";
                 DataTable dt = c.GetDataAsDataTable(query);
                 foreach (var item in dt.AsEnumerable())
                 {
@@ -592,7 +631,7 @@ namespace dms.AjexServer
             try
             {
                 CommonFunction.clsCommon c = new CommonFunction.clsCommon();
-                string query = "SELECT  Id, Lable, Documnet, UserId, Width, Height, [Top], [Left],Transform FROM dbo.DocumentLablesTB where Documnet='" + document.ToString() + "'";
+                string query = "SELECT  Id, Lable, Documnet, UserId, Width, Height, [Top], [Left],Transform,Sort FROM dbo.DocumentLablesTB where Documnet='" + document.ToString() + "'";
                 DataTable dt = c.GetDataAsDataTable(query);
                 foreach (var item in dt.AsEnumerable())
                 {

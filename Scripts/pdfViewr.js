@@ -737,12 +737,12 @@ function GetAllBarcods() {
                 }
 
                 if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable  can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable  can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
                 else {
 
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '">';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '">';
                 }
                 //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
             }
@@ -832,7 +832,11 @@ function AddLable() {
             var jsdata = JSON.parse(data.d);
             if (jsdata != false) {
                 var barcode = $('#hdnDocLable').val();
-                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
+                var barcode = jsdata.split('|')[1];
+                var sort = jsdata.split('|')[2];
+                jsdata = jsdata.split('|')[0];
+                
+                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-sort="' + sort +'" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
                 //$("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + lable + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
                 //$(".context-menu").show();
             }
@@ -1324,12 +1328,12 @@ function CopyBarcode(trasnList) {
                     }
                 }
                 if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" />';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" />';
                 else {
 
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '"/>';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '"/>';
                 }
             }
             $("#viewer").prepend(html);
