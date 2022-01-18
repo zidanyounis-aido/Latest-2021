@@ -38,7 +38,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link href="Scripts/jQuery-contextMenu/jquery.contextMenu.css" rel="stylesheet" />
     <link href="css/awsf.css" rel="stylesheet" />
     <link href="css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="https://printjs-4de6.kxcdn.com/print.min.css">
+    <%--    <link rel="stylesheet" type="text/css" href="https://printjs-4de6.kxcdn.com/print.min.css">--%>
 
     <link href="viewer.css" rel="stylesheet" />
     <style>
@@ -54,7 +54,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <%--    <link href="css/bootstrap-image-checkbox.css" rel="stylesheet" />--%>
     <style>
-       /* canvas {
+        /* canvas {
             z-index: -2 !important;
         }*/
 
@@ -68,7 +68,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             z-index: 1 !important;
             position: absolute !important;
             border: 0.3px solid;
-            padding-bottom: 5px;
+            /*padding-bottom: 5px;*/
         }
 
         .context-menu {
@@ -111,8 +111,15 @@ See https://github.com/adobe-type-tools/cmap-resources
     <input type="hidden" id="hdnpath" runat="server" />
     <input type="hidden" id="hdnsignture" runat="server" />
     <input type="hidden" id="hdnDocLable" runat="server" />
+    <input type="hidden" id="hdnDocserial" runat="server" />
+    <input type="hidden" id="hdnDocname" runat="server" />
+    <input type="hidden" id="hdnDoctype" runat="server" />
     <input type="hidden" id="hdndocument" runat="server" />
     <input type="hidden" id="hdnuser" runat="server" />
+    <div style="display:none;">
+        <canvas id="code128"></canvas>
+    </div>
+
     <div id="outerContainer">
         <div id="sidebarContainer" style="position: fixed;">
             <div id="toolbarSidebar">
@@ -327,8 +334,9 @@ See https://github.com/adobe-type-tools/cmap-resources
     <script src="Scripts/pdfViewr.js"></script>
     <script src="viewer.js"></script>
     <script src="JS/bootstrap.min.js"></script>
-     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
-  <%--  <script>
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.3.20/JsBarcode.all.min.js"></script>
+
+    <%--  <script>
         function printDiv() {
             printJS('printJS-form', 'html')
         }

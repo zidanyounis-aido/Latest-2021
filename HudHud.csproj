@@ -85,24 +85,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Aspose.Words.dll</HintPath>
     </Reference>
-    <Reference Include="Babel.Licensing, Version=2.8.8.0, Culture=neutral, PublicKeyToken=138d17b5bd621ab7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\Babel.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="BitMiracle.LibTiff.NET, Version=2.4.638.0, Culture=neutral, PublicKeyToken=53879b3e20e7a7d6, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\BitMiracle.LibTiff.NET.dll</HintPath>
-    </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.10.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
     <Reference Include="Chestysoft.csNetUploadTrial">
       <HintPath>..\..\..\csNetUpload\Chestysoft.csNetUploadTrial.dll</HintPath>
     </Reference>
     <Reference Include="ClosedXML, Version=0.95.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\DESKTOP\closedXML (1)\closedXML.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetZip, Version=1.15.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="HudhudResources, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -111,36 +99,6 @@
     <Reference Include="HudhudResources.resources, Version=1.0.0.0, Culture=ar, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\HudhudResources.resources.dll</HintPath>
-    </Reference>
-    <Reference Include="IronBarCode, Version=2021.12.0.21, Culture=neutral, PublicKeyToken=b971bb3971bdf306, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronBarCode.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPdf.Pdfium, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronPdf.Pdfium.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPdf.Pdfium.Domain, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=94e1c31412563c75, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronPdf.Pdfium.Domain.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.Analytics, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.Common, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.Deployment, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.IronConfigurationManager, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.IronConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.Licenses, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.Licenses.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.Logger, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.Logger.dll</HintPath>
-    </Reference>
-    <Reference Include="IronSoftware.Standard.Aforge, Version=1.0.0.4471, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\IronSoftware.Standard.Aforge.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.8.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -169,14 +127,8 @@
       <HintPath>packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="NativeLibraryLoader, Version=1.0.12.0, Culture=neutral, PublicKeyToken=212d70e9efeae4c7, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\NativeLibraryLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PdfSharp, Version=1.51.5185.0, Culture=neutral, PublicKeyToken=94e1c31412563c75, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\PdfSharp.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -199,12 +151,6 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="zxing, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\zxing.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.presentation, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
-      <HintPath>packages\BarCode.2021.12.21\lib\net40\zxing.presentation.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\branchsManage.aspx" />

@@ -42,6 +42,33 @@ namespace dms
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnDocLable;
 
         /// <summary>
+        /// hdnDocserial control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnDocserial;
+
+        /// <summary>
+        /// hdnDocname control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnDocname;
+
+        /// <summary>
+        /// hdnDoctype control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnDoctype;
+
+        /// <summary>
         /// hdndocument control.
         /// </summary>
         /// <remarks>

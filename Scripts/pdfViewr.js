@@ -737,12 +737,12 @@ function GetAllBarcods() {
                 }
 
                 if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable  can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable  can-drop" data-sort="' + jsdata[i].Sort + '" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" >';
                 else {
 
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '">';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort + '" data-type="1" data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '">';
                 }
                 //html += "<img class='context-menu' data-user='" + jsdata[i].UserId + "' data-id='" + jsdata[i].Id + "' src='" + jsdata[i].Signture + "' style='width:" + jsdata[i].Width + "px;height:" + jsdata[i].Height + "px;position:absolute;left:" + jsdata[i].Left + "px;top:" + jsdata[i].Top + "px' />";
             }
@@ -822,10 +822,11 @@ function UpdateSignPosition(id) {
     });
 }
 function AddLable() {
+    var lable = generateLAbleBase64();
     $.ajax({
         type: "POST",
         url: "/AjexServer/ajexresponse.aspx/AddLable",
-        data: "{width:'" + hw + "',height:'" + hh + "',top:'" + ht + "',left:'" + hl + "',document:'" + documentId + "',user:'" + userId + "'}",
+        data: "{width:'" + hw + "',height:'" + hh + "',top:'" + ht + "',left:'" + hl + "',document:'" + documentId + "',user:'" + userId + "',lable:'" + lable + "'}",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (data) {
@@ -835,8 +836,8 @@ function AddLable() {
                 var barcode = jsdata.split('|')[1];
                 var sort = jsdata.split('|')[2];
                 jsdata = jsdata.split('|')[0];
-                
-                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-sort="' + sort +'" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
+
+                $("#viewer").prepend('<img id="drag-' + jsdata + '" class="ez-resource-show__preview__image drag-drop drag-lable can-drop" data-sort="' + sort + '" data-type="1" data-id="' + jsdata + '" style="width: ' + hw + 'px; height: ' + hh + 'px; position: absolute;transform: translate( ' + hl + 'px, ' + ht + 'px); "  src="' + barcode + '" data-x="' + hl + '" data-y="' + ht + '">');//left: ' + hl + 'px; top: ' + ht + 'px
                 //$("#viewer").prepend("<img class='context-menu' data-user='" + userId + "' data-id='" + jsdata + "' src='" + lable + "' style='width:" + hw + "px;height:" + hh + "px;position:absolute;left:" + hl + "px;top:" + ht + "px' />");
                 //$(".context-menu").show();
             }
@@ -1159,7 +1160,7 @@ function getOffset(el) {
 var op = '';
 var pagesLength = 0;
 function drawPageHtml(opration) {
-    
+
     op = opration;
     var collection = $("#thumbnailView").find("div");
     if (opration == 'copypage') { // copy all not current
@@ -1278,7 +1279,7 @@ function saveChanges() {
         }
         var collect = optype == 1 ? $("img[data-type=1]") : $("img[data-type=0]");
         for (var i = 0; i < collect.length; i++) {
-            
+
             //var searchX = Number($(collect[i]).attr("data-x"));
             var cpage = getPageAccorddingTotarnsform($(collect[i]));
             if (jQuery.inArray(cpage, selectdPages) !== -1) {
@@ -1328,12 +1329,12 @@ function CopyBarcode(trasnList) {
                     }
                 }
                 if (jsdata[i].Transform == "" || jsdata[i].Transform == null)
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" />';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort + '" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute; left: ' + jsdata[i].Left + 'px; top: ' + jsdata[i].Top + 'px"  src="' + jsdata[i].Lable + '" />';
                 else {
 
                     var XP = jsdata[i].Transform.split(',')[0].replace('transform: translate( ', '').replace('px', '').trim();
                     var YP = jsdata[i].Transform.split(',')[1].replace(')', '').replace('px', '').replace(';', '').trim();
-                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort +'" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '"/>';
+                    html += '<img id="drag-' + jsdata[i].Id + '"  class="drag-drop drag-lable can-drop" data-sort="' + jsdata[i].Sort + '" data-type="1"  data-id="' + jsdata[i].Id + '" style="width: ' + jsdata[i].Width + 'px; height: ' + jsdata[i].Height + 'px; position: absolute;' + jsdata[i].Transform + '"  src="' + jsdata[i].Lable + '"  data-x="' + XP + '" data-y="' + YP + '"/>';
                 }
             }
             $("#viewer").prepend(html);
@@ -1409,7 +1410,7 @@ function getPageAccorddingTotarnsform(el) {
 }
 var fromtop = 0;
 function calcDistance(copypage, currentpage) {
-    
+
     var totalDistance = 0;
     //if (copypage < currentpage) {
     //    //go to top
@@ -1457,4 +1458,55 @@ function calcFromTop(currentpage) {
         }
     }
     return ft;
+}
+function generateLAbleBase64() {
+    //debugger;
+    var canvas = document.querySelector('#code128');
+    var ctx = canvas.getContext('2d');
+    var barcodeMarginTop = 45;
+    var typeid = $("#hdnDoctype").val();
+    var serial = $("#hdnDocserial").val();
+    var txtDocName = $("#hdnDocname").val();
+    JsBarcode("#code128", "000000" + documentId.split("-")[0], {
+        margin: 5,
+        marginTop: barcodeMarginTop,
+        marginLeft: 25,
+        marginRight: 35,
+        displayValue: false,
+        height: 40,
+        width:1.5
+    });
+    ctx.font = 'bold 9px Monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'black';
+    var txtBarCode1 = "العنوان : " + txtDocName + "";
+    let yourDate = new Date()
+    var datstr = yourDate.toISOString().split('T')[0];
+    var txtBarCode2 = "التاريخ : " + datstr + "   " + "رقم المستند :" + documentId.split("-")[0] + '-' + getSort();
+    ctx.fillText(txtBarCode1, -80, 8, canvas.width);
+    ctx.fillText(txtBarCode2, -80, 20, canvas.width);
+    var txtBarCode3 = "";
+    if (typeid != "" && typeid != null) {
+        if (typeid == "1") {
+            txtBarCode3 = "رقم الصادر : " + serial;
+        }
+        else {
+            txtBarCode3 += "رقم الوارد : " + serial;
+        }
+        ctx.fillText(txtBarCode3, -80, 32, canvas.width);
+    }
+    var canva = $('#code128');
+    var url = canva[0].toDataURL();
+    //alert(url);
+    return url;
+}
+function getSort() {
+    var sort = 0;
+    var collection = $("img[data-type=1]");
+    for (var i = 0; i < collection.length; i++) {
+        if (Number($(collection[i]).attr("data-sort")) > sort) {
+            sort = Number($(collection[i]).attr("data-sort"));
+        }
+    }
+    return sort + 1;
 }

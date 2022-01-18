@@ -42,9 +42,15 @@ namespace dms
             //Example 5
             string image = c.GetDataAsScalar("select top 1 Signature from users where userID=" + int.Parse(Request.QueryString["userID"].ToString())).ToString();
             string barcode = c.GetDataAsScalar("select top 1 Barcode from documents where docID=" + docID).ToString();
+            string serial = c.GetDataAsScalar("select top 1 serial from documents where docID=" + docID + "").ToString();
+            string typeId = c.GetDataAsScalar("select top 1 typeId from documents where docID=" + docID + "").ToString();
+            string txtDocName = c.GetDataAsScalar("select top 1 docName from documents where docID=" + docID + "").ToString();
             //string x = c.GetDataAsScalar("select top 1 Signature from users where userID=" + Session["userID"].ToString()).ToString();
             hdnsignture.Value = image;
             hdnDocLable.Value = barcode;
+            hdnDoctype.Value = typeId;
+            hdnDocserial.Value = serial;
+            hdnDocname.Value = txtDocName;
             hdndocument.Value = docID.ToString() + "-" + verId.ToString();
             hdnuser.Value = Session["userID"].ToString();
         }
