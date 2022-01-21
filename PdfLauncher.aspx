@@ -58,12 +58,9 @@ See https://github.com/adobe-type-tools/cmap-resources
             z-index: -2 !important;
         }*/
 
-        /* .drag-drop {
+         .drag-drop {
             z-index: 1 !important;
-            position: absolute !important;
-            border: 0.3px solid;
-            padding-bottom: 5px;
-        }*/
+        }
         .drag-lable {
             z-index: 1 !important;
             position: absolute !important;
